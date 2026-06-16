@@ -5,7 +5,7 @@ import Input from "../components/Input";
 import { supabase } from "../services/supabase";
 import ModalCambiarClave from "../components/ModalCambiarClave";
 
-function Login({ manejarLogin }) {
+function Login({ iniciarSesion }) {
 
     const [nombre, setNombre] = useState("");
     const [clave, setClave] = useState("");
@@ -41,7 +41,7 @@ function Login({ manejarLogin }) {
             JSON.stringify(data)
         );
 
-        manejarLogin(data);
+        iniciarSesion(data);
 
         navigate("/");
     }
@@ -70,7 +70,6 @@ function Login({ manejarLogin }) {
                     />
 
                     <Button
-                        active={location.pathname === "/"}
                         variant="primary"
                         onClick={manejarLogin}
                     >
@@ -94,6 +93,8 @@ function Login({ manejarLogin }) {
                             iniciarSesion(usuarioActualizado);
 
                             setMostrarCambioClave(false);
+
+                            navigate("/");ñ
                         }}
                     />
                 )
