@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Button from "./Button";
 
 function Navbar({ usuario }) {
+
+    const location = useLocation();
+    const [menuAbierto, setMenuAbierto] = useState(false);
 
     const iconos = {
         Lider: "👑",
@@ -10,8 +14,6 @@ function Navbar({ usuario }) {
         Elite: "🤝",
         Miembro: "🌸",
     };
-
-    const location = useLocation();
 
     function cerrarSesion() {
 
@@ -30,7 +32,7 @@ function Navbar({ usuario }) {
                         🌸 Shangri-La
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="hidden md:flex gap-3">
 
                         <Link to="/">
                             <Button
@@ -65,7 +67,7 @@ function Navbar({ usuario }) {
                         </Link>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="hidden md:flex items-center gap-4">
 
                         <div className="text-right">
                             <p className="text-sm  text-gray-500">
@@ -82,6 +84,71 @@ function Navbar({ usuario }) {
                         </Button>
 
                     </div>
+
+                    <button
+                        className="md:hidden text-3xl"
+                        onClick={() =>
+                            setMenuAbierto(!menuAbierto)
+                        }
+                    >
+                        ☰
+                    </button>
+
+                    {
+                        menuAbierto && (
+                            <div
+                                className="
+                md:hidden
+                flex
+                flex-col
+                gap-2
+                p-4
+                border-t
+                border-pink-300
+            "
+                            >
+
+                                <Link to="/">
+                                    <Button>
+                                        🏠 Inicio
+                                    </Button>
+                                </Link>
+
+                                <Link to="/flores">
+                                    <Button>
+                                        🌸 Flores
+                                    </Button>
+                                </Link>
+
+                                <Link to="/miembros">
+                                    <Button>
+                                        👥 Miembros
+                                    </Button>
+                                </Link>
+
+                                <Link to="/coleccion">
+                                    <Button>
+                                        🌷 Colección
+                                    </Button>
+                                </Link>
+
+                                <div className="text-center mt-2">
+                                    <p>
+                                        {iconos[usuario.rol]} {usuario.nombre}
+                                    </p>
+                                </div>
+
+                                <Button
+                                    variant="danger"
+                                    onClick={cerrarSesion}
+                                >
+                                    📤 Cerrar sesión
+                                </Button>
+
+                            </div>
+                        )
+                    }
+
                 </div>
             </div>
         </div>
