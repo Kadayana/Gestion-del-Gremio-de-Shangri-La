@@ -47,8 +47,23 @@ function Login({ iniciarSesion }) {
     }
 
     return (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-            <div className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-md">
+        <div className=" min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-purple-200 flex justify-center items-center p-4">
+
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 w-full max-w-md">
+
+                <div className="text-center mb-6">
+                    <div className="text-6xl mb-3">
+                        🌸
+                    </div>
+
+                    <h1 className="text-4xl font-bold text-pink-600">
+                        Shangri-La
+                    </h1>
+
+                    <p className="text-gray-600 mt-2">
+                        Sistema de gestión del gremio
+                    </p>
+                </div>
 
                 <h2 className="text-2xl font-bold text-center mb-6">
                     🌸 Iniciar Sesión
@@ -69,13 +84,14 @@ function Login({ iniciarSesion }) {
                         placeholder="🔒 Contraseña"
                     />
 
-                    <Button
-                        variant="primary"
-                        onClick={manejarLogin}
-                    >
-                        Ingresar
-                    </Button>
-
+                    <div className="flex justify-center">
+                        <Button
+                            variant="primary"
+                            onClick={manejarLogin}
+                        >
+                            Ingresar
+                        </Button>
+                    </div>
                 </div>
 
             </div>
@@ -94,7 +110,7 @@ function Login({ iniciarSesion }) {
 
                             setMostrarCambioClave(false);
 
-                            navigate("/");ñ
+                            navigate("/");
                         }}
                     />
                 )
