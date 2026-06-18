@@ -1,4 +1,4 @@
-function FlorCard({ flor, usuario }) {
+function FlorCard({ flor, usuario, onEliminar }) {
 
     const esAdmin =
         usuario?.rol === "Lider" ||
@@ -20,54 +20,51 @@ function FlorCard({ flor, usuario }) {
 
     return (
         <div className="bg-pink-50 rounded-3xl shadow p-4 hover:shadow-lg transition hover:-translate-y-1 w-70">
-            <di className="flex justify-between items-center  ">
-
+            <div className="flex justify-between items-center mb-2 mt-2 ">
                 <span
-                    className={`inline-block mt-2 px-3 py-1 rounded-full text-sm ${colores[flor.rareza]
+                    className={`px-3 py-1 rounded-full text-sm ${colores[flor.rareza]
                         }`}
                 >
                     {nombresRareza[flor.rareza]}
                 </span>
 
-                <div>
-
-                    
-                </div>
-
                 {
                     esAdmin && (
-                        <div className="flex gap-2 justify-center mt-2">
-
+                        <div className="flex gap-2 justify-center">
                             <button
                                 className="
-                            bg-yellow-300
-                            hover:bg-yellow-500
-                            inline-block mt-2 px-3 py-1 rounded-full text-sm
+                            bg-yellow-200
+                            hover:bg-yellow-400
+                            px-3
+                            py-1
+                            rounded-full
+                            text-sm
                         "
                             >
                                 ✏️
                             </button>
 
-                            <button
+                            <button onClick={() =>
+                                onEliminar(flor.id)
+                            }
                                 className="
-                            bg-red-400
-                            hover:bg-red-600
-                            inline-block mt-2 px-3 py-1 rounded-full text-sm
+                                bg-red-200
+                                    hover:bg-red-400
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                    text-sm
                         "
                             >
                                 🗑️
                             </button>
-
                         </div>
                     )
                 }
+            </div>
 
 
-
-            </di>
-
-
-            <h3 className="font-semibold text-lg text-center mt-2 mb-3">
+            <h3 className="font-semibold text-lg text-center mt-2 mb-3 pt-2">
                 🌸 {flor.nombre}
             </h3>
 

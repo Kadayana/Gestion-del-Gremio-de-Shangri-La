@@ -58,6 +58,36 @@ function Flores({ usuario }) {
     return coincideNombre && coincideRareza;
   });
 
+  async function eliminarFlor(id) {
+
+    const confirmar = window.confirm(
+      "¿Eliminar esta flor?"
+    );
+
+    if (!confirmar) return;
+
+    await supabase
+      .from("miembro_flores")
+      .delete()
+      .eq("flor_id", id);
+
+    const { error } = await supabase
+      .from("flores")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    mostrarToast(
+      "🗑️ Flor eliminada"
+    );
+
+    obtenerFlores();
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
 
@@ -123,6 +153,7 @@ function Flores({ usuario }) {
           onClose={() => setMostrarModal(false)}
           obtenerFlores={obtenerFlores}
           mostrarToast={mostrarToast}
+
         />
       )}
 
@@ -151,6 +182,7 @@ function Flores({ usuario }) {
             key={flor.id}
             flor={flor}
             usuario={usuario}
+            onEliminar={eliminarFlor}
           />
         ))}
 
