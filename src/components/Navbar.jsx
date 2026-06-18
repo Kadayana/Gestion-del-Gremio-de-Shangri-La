@@ -127,25 +127,25 @@ function Navbar({ usuario }) {
                                 "
                                 >
 
-                                    <Link to="/">
+                                    <Link to="/" onClick={() => setMenuAbierto(false)}>
                                         <Button>
                                             🏠 Inicio
                                         </Button>
                                     </Link>
 
-                                    <Link to="/flores">
+                                    <Link to="/flores" onClick={() => setMenuAbierto(false)}>
                                         <Button>
                                             🌸 Flores
                                         </Button>
                                     </Link>
 
-                                    <Link to="/miembros">
+                                    <Link to="/miembros" onClick={() => setMenuAbierto(false)}>
                                         <Button>
                                             👥 Miembros
                                         </Button>
                                     </Link>
 
-                                    <Link to="/coleccion">
+                                    <Link to="/coleccion" onClick={() => setMenuAbierto(false)}>
                                         <Button>
                                             🌷 Colección
                                         </Button>
