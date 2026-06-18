@@ -9,11 +9,14 @@ import Miembros from "./pages/Miembros";
 import Coleccion from "./pages/Coleccion";
 
 function App() {
-  const [usuario, setUsuario] = useState(
-    JSON.parse(
-      localStorage.getItem("usuario")
-    )
-  );
+  const [usuario, setUsuario] = useState(() => {
+    const usuarioGuardado =
+      localStorage.getItem("usuario");
+
+    return usuarioGuardado
+      ? JSON.parse(usuarioGuardado)
+      : null;
+  });
 
   if (!usuario) {
     return (
@@ -37,20 +40,20 @@ function App() {
             path="/"
             element={<Dashboard />}
           />
-          
+
           <Route
             path="/flores"
-            element={<Flores />}
+            element={<Flores usuario={usuario} />}
           />
 
           <Route
             path="/miembros"
-            element={<Miembros />}
+            element={<Miembros usuario={usuario} />}
           />
 
           <Route
             path="/coleccion"
-            element={<Coleccion />}
+            element={<Coleccion usuario={usuario} />}
           />
 
 

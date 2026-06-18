@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import ModalNuevaMiembro from "../components/ModalNuevoMiembro";
 import Toast from "../components/SuccessModal";
 
-function Miembros() {
+function Miembros({ usuario }) {
 
   const [miembros, setMiembros] = useState([]);
   const [busqueda, setBusqueda] = useState("");
@@ -33,6 +33,10 @@ function Miembros() {
     obtenerMiembros();
   }, []);
 
+  const esAdmin =
+    usuario?.rol === "Lider" ||
+    usuario?.rol === "Colider";
+
   function mostrarToast(mensaje) {
     console.log("MOSTRAR TOAST:", mensaje);
 
@@ -57,12 +61,14 @@ function Miembros() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-center mb-6">
-
-        <Button variant="primary"
-          onClick={() => setMostrarModal(true)}
-        >
-          ➕ Agregar Miembro
-        </Button>
+        {
+          esAdmin && (
+            <Button variant="primary"
+              onClick={() => setMostrarModal(true)}
+            >
+              ➕ Agregar Miembro
+            </Button>
+          )}
 
       </div>
       {mostrarModal && (

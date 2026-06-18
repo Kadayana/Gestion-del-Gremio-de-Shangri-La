@@ -7,7 +7,7 @@ import ModalNuevaFlor from "../components/ModalNuevaFlor";
 import Button from "../components/Button";
 import Toast from "../components/SuccessModal";
 
-function Flores() {
+function Flores({ usuario }) {
 
   const [flores, setFlores] = useState([]);
   const [busqueda, setBusqueda] = useState("");
@@ -18,6 +18,10 @@ function Flores() {
   useEffect(() => {
     obtenerFlores();
   }, []);
+
+  const esAdmin =
+    usuario?.rol === "Lider" ||
+    usuario?.rol === "Colider";
 
   function mostrarToast(mensaje) {
     console.log("MOSTRAR TOAST:", mensaje);
@@ -102,11 +106,16 @@ function Flores() {
 
       <div className="flex justify-center mb-6">
 
-        <Button variant="primary"
-          onClick={() => setMostrarModal(true)}
-        >
-          ➕ Agregar Flor
-        </Button>
+        {
+          esAdmin && (
+            <Button
+              variant="primary"
+              onClick={() => setMostrarModal(true)}
+            >
+              ➕ Agregar Flor
+            </Button>
+          )
+        }
 
       </div>
       {mostrarModal && (
@@ -141,6 +150,7 @@ function Flores() {
           <FlorCard
             key={flor.id}
             flor={flor}
+            usuario={usuario}
           />
         ))}
 
