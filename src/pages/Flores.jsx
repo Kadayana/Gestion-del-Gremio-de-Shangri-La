@@ -6,6 +6,7 @@ import FilterButton from "../components/FilterButton";
 import ModalNuevaFlor from "../components/ModalNuevaFlor";
 import Button from "../components/Button";
 import Toast from "../components/SuccessModal";
+import ModalConfirmacion from "../components/ModalConfirmacion";
 
 function Flores({ usuario }) {
 
@@ -14,6 +15,7 @@ function Flores({ usuario }) {
   const [filtroRareza, setFiltroRareza] = useState("TODAS");
   const [mostrarModal, setMostrarModal] = useState(false);
   const [toast, setToast] = useState("");
+  const [florEliminar, setFlorEliminar] = useState(null);
 
   useEffect(() => {
     obtenerFlores();
@@ -58,13 +60,13 @@ function Flores({ usuario }) {
     return coincideNombre && coincideRareza;
   });
 
+  function solicitarEliminar(flor) {
+
+    setFlorEliminar(flor);
+
+  }
+
   async function eliminarFlor(id) {
-
-    const confirmar = window.confirm(
-      "¿Eliminar esta flor?"
-    );
-
-    if (!confirmar) return;
 
     await supabase
       .from("miembro_flores")
@@ -84,6 +86,8 @@ function Flores({ usuario }) {
     mostrarToast(
       "🗑️ Flor eliminada"
     );
+
+    setFlorEliminar(null);
 
     obtenerFlores();
   }
@@ -182,11 +186,26 @@ function Flores({ usuario }) {
             key={flor.id}
             flor={flor}
             usuario={usuario}
-            onEliminar={eliminarFlor}
+            onEliminar={solicitarEliminar}
           />
         ))}
 
       </div>
+
+      {
+        florEliminar && (
+          <ModalConfirmacion
+            titulo="🗑️ Eliminar Flor"
+            mensaje={`¿Seguro que deseas eliminar "${florEliminar.nombre}"?`}
+            onClose={() =>
+              setFlorEliminar(null)
+            }
+            onConfirm={() =>
+              eliminarFlor(florEliminar.id)
+            }
+          />
+        )
+      }
     </div>
   );
 }

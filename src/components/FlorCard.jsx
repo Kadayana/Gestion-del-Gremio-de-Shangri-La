@@ -45,7 +45,7 @@ function FlorCard({ flor, usuario, onEliminar }) {
                             </button>
 
                             <button onClick={() =>
-                                onEliminar(flor.id)
+                                onEliminar(flor)
                             }
                                 className="
                                 bg-red-200
