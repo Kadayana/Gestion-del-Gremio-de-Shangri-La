@@ -29,10 +29,11 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                 </span>
 
                 {
-                    esAdmin && (
+                    esAdmin && (onEditar || onEliminar) && (
                         <div className="flex gap-2 justify-center">
-                            <button onClick={() => onEditar(flor)}
-                                className="
+                            {onEditar && (
+                                <button onClick={() => onEditar?.(flor)}
+                                    className="
                             bg-yellow-200
                             hover:bg-yellow-400
                             px-3
@@ -40,14 +41,13 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                             rounded-full
                             text-sm
                         "
-                            >
-                                ✏️
-                            </button>
-
-                            <button onClick={() =>
-                                onEliminar(flor)
-                            }
-                                className="
+                                >
+                                    ✏️
+                                </button>
+                            )}
+                            {onEliminar && (
+                                <button onClick={onEliminar}
+                                    className="
                                 bg-red-200
                                     hover:bg-red-400
                                     px-3
@@ -55,9 +55,12 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                                     rounded-full
                                     text-sm
                         "
-                            >
-                                🗑️
-                            </button>
+                                >
+
+                                    🗑️
+                                </button>
+                            )}
+
                         </div>
                     )
                 }

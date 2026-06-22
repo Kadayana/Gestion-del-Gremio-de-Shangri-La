@@ -5,13 +5,39 @@ import Select from "../components/Select";
 import { supabase } from "../services/supabase";
 
 
-function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast }) {
+function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, miembroEditar = null }) {
 
-    const [nombre, setNombre] = useState("");
-    const [rol, setRol] = useState("");
+    const [nombre, setNombre] = useState(miembroEditar?.nombre || "");
+    const [rol, setRol] = useState(miembroEditar?.rol || "");
 
 
     async function guardarMiembro() {
+
+        if (miembroEditar) {
+
+            const { error } = await supabase
+                .from("miembros")
+                .update({
+                    nombre,
+                    rol
+                })
+                .eq("id", miembroEditar.id);
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            mostrarToast(
+                "✏️ Miembro actualizado"
+            );
+
+            await obtenerMiembros();
+
+            onClose();
+
+            return;
+        }
         if (!nombre || !rol) {
             alert("Por favor, completa todos los campos.");
             return;
@@ -45,7 +71,11 @@ function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast }) {
             <div className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-md">
 
                 <h2 className="text-2xl font-bold text-center mb-6">
-                    🌸 Agregar Miembro
+                    {
+                        miembroEditar
+                            ? "✏️ Editar Miembro"
+                            : "🌸 Agregar Miembro"
+                    }
                 </h2>
 
                 <div className="space-y-4">
@@ -63,7 +93,7 @@ function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast }) {
                         onChange={(e) =>
                             setRol(e.target.value)
                         }
-                        
+
                         options={[
                             {
                                 value: "Lider",
@@ -87,7 +117,7 @@ function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast }) {
                             },
                         ]}
                         placeholder="Seleccionar rol"
-                        
+
                     />
 
                     <div className="flex gap-3 justify-center">

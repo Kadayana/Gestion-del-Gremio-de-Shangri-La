@@ -57,7 +57,7 @@ function Coleccion({ usuario }) {
     usuario?.rol === "Lider" ||
     usuario?.rol === "Colider";
 
-    
+
   function mostrarToast(mensaje) {
     console.log("MOSTRAR TOAST:", mensaje);
 
@@ -204,6 +204,7 @@ function Coleccion({ usuario }) {
         mostrarColeccion && (
           <ModalColeccionMiembro
             miembro={miembroSeleccionado}
+            usuario={usuario}
             onClose={() =>
               setMostrarColeccion(false)
             }

@@ -10,7 +10,7 @@ import ModalConfirmacion from "../components/ModalConfirmacion";
 
 function Flores({ usuario }) {
 
-  const [flores, setFlores] = useState([]);
+  const [flores, setFlores] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [filtroRareza, setFiltroRareza] = useState("TODAS");
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -18,58 +18,63 @@ function Flores({ usuario }) {
   const [florEliminar, setFlorEliminar] = useState(null);
   const [florEditar, setFlorEditar] = useState(null);
 
+  const esAdmin =
+    usuario?.rol === "Lider" ||
+    usuario?.rol === "Colider";
 
   useEffect(() => {
     obtenerFlores();
   }, []);
 
-  const esAdmin =
-    usuario?.rol === "Lider" ||
-    usuario?.rol === "Colider";
+  async function obtenerFlores() {
+    try {
+      const { data, error } = await supabase
+        .from("flores")
+        .select("*");
+
+      if (error) {
+        console.error(error);
+        setFlores([]);
+        return;
+      }
+
+      setFlores(data || []);
+    } catch (err) {
+      console.error(err);
+      setFlores([]);
+    }
+  }
 
   function mostrarToast(mensaje) {
-    console.log("MOSTRAR TOAST:", mensaje);
-
     setToast(mensaje);
 
     setTimeout(() => {
       setToast("");
     }, 3000);
-
   }
 
-  async function obtenerFlores() {
-    const { data, error } = await supabase
-      .from("flores")
-      .select("*");
+  const floresSeguras = Array.isArray(flores) ? flores : [];
 
-    if (!error) {
-      setFlores(data);
-    }
-  }
+  const resultados = floresSeguras.filter((flor) => {
 
-  const resultados = flores.filter((flor) => {
+    const nombre = flor.nombre?.toLowerCase() || "";
+    const rareza = flor.rareza?.trim().toUpperCase();
 
     const coincideNombre =
-      flor.nombre
-        .toLowerCase()
-        .includes(busqueda.toLowerCase());
+      nombre.includes(busqueda.toLowerCase());
 
     const coincideRareza =
       filtroRareza === "TODAS" ||
-      flor.rareza === filtroRareza;
+      rareza === filtroRareza;
 
     return coincideNombre && coincideRareza;
   });
 
   function solicitarEliminar(flor) {
-
     setFlorEliminar(flor);
-
   }
 
   async function eliminarFlor(id) {
-
     await supabase
       .from("miembro_flores")
       .delete()
@@ -85,21 +90,23 @@ function Flores({ usuario }) {
       return;
     }
 
-    mostrarToast(
-      "🗑️ Flor eliminada"
-    );
+    mostrarToast("🗑️ Flor eliminada");
 
     setFlorEliminar(null);
-
     obtenerFlores();
   }
 
   function editarFlor(flor) {
-
     setFlorEditar(flor);
-
     setMostrarModal(true);
+  }
 
+  if (flores === null) {
+    return (
+      <div className="text-center p-10">
+        🌸 Cargando flores...
+      </div>
+    );
   }
 
   return (
@@ -127,7 +134,7 @@ function Flores({ usuario }) {
           onClick={() => setFiltroRareza("SR")}
           color="bg-purple-100"
         >
-          Supe Rara
+          Super Rara
         </FilterButton>
 
         <FilterButton
@@ -149,41 +156,29 @@ function Flores({ usuario }) {
       </div>
 
       <div className="flex justify-center mb-6">
-
-        {
-          esAdmin && (
-            <Button
-              variant="primary"
-              onClick={() => setMostrarModal(true)}
-            >
-              ➕ Agregar Flor
-            </Button>
-          )
-        }
-
+        {esAdmin && (
+          <Button
+            variant="primary"
+            onClick={() => setMostrarModal(true)}
+          >
+            ➕ Agregar Flor
+          </Button>
+        )}
       </div>
-      {
-        mostrarModal && (
-          <ModalNuevaFlor
-            florEditar={florEditar}
-            onClose={() => {
 
-              setMostrarModal(false);
-              setFlorEditar(null);
+      {mostrarModal && (
+        <ModalNuevaFlor
+          florEditar={florEditar}
+          onClose={() => {
+            setMostrarModal(false);
+            setFlorEditar(null);
+          }}
+          obtenerFlores={obtenerFlores}
+          mostrarToast={mostrarToast}
+        />
+      )}
 
-            }}
-            obtenerFlores={obtenerFlores}
-            mostrarToast={mostrarToast}
-          />
-        )
-      }
-
-
-      {
-        toast && (
-          <Toast mensaje={toast} />
-        )
-      }
+      {toast && <Toast mensaje={toast} />}
 
       <SearchBar
         value={busqueda}
@@ -191,10 +186,9 @@ function Flores({ usuario }) {
         placeholder="🔍 Buscar flor..."
       />
 
-      <p className="text-center mb-6 text-lg">
-        🌸 Mostrando {resultados.length} de {flores.length} flores
+       <p className="text-center text-gray-500 mb-6">
+        🌸 Mostrando {resultados.length} de {floresSeguras.length} flores
       </p>
-
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
 
@@ -203,32 +197,24 @@ function Flores({ usuario }) {
             key={flor.id}
             flor={flor}
             usuario={usuario}
-            onEliminar={solicitarEliminar}
             onEditar={editarFlor}
+            onEliminar={() => solicitarEliminar(flor)}
           />
         ))}
 
       </div>
 
-      {
-        florEliminar && (
-          <ModalConfirmacion
-            titulo="🗑️ Eliminar Flor"
-            mensaje={`¿Segura que deseas eliminar "${florEliminar.nombre}"?`}
-            onClose={() =>
-              setFlorEliminar(null)
-            }
-            onConfirm={() =>
-              eliminarFlor(florEliminar.id)
-            }
-          />
-        )
-      }
+      {florEliminar && (
+        <ModalConfirmacion
+          titulo="🗑️ Eliminar Flor"
+          mensaje={`¿Segura que deseas eliminar "${florEliminar.nombre}"?`}
+          onClose={() => setFlorEliminar(null)}
+          onConfirm={() => eliminarFlor(florEliminar.id)}
+        />
+      )}
+
     </div>
   );
 }
-
-
-
 
 export default Flores;

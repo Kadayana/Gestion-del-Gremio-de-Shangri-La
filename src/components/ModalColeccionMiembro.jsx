@@ -1,18 +1,30 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
 import FlorCard from "./FlorCard";
+import Toast from "../components/SuccessModal";
+import ModalConfirmacion from "../components/ModalConfirmacion";
 
 
-function ModalColeccionMiembro({
-    miembro,
-    onClose,
-}) {
+function ModalColeccionMiembro({ miembro, usuario, onClose, }) {
 
     const [flores, setFlores] = useState([]);
+    const [toast, setToast] = useState("");
 
     useEffect(() => {
         obtenerFloresMiembro();
     }, []);
+
+    function mostrarToast(mensaje) {
+        console.log("MOSTRAR TOAST:", mensaje);
+
+        setToast(mensaje);
+
+        setTimeout(() => {
+            setToast("");
+        }, 3000);
+
+    }
+
 
     async function obtenerFloresMiembro() {
 
@@ -33,6 +45,27 @@ function ModalColeccionMiembro({
         if (!error) {
             setFlores(data);
         }
+    }
+
+    async function eliminarFlorMiembro(id) {
+
+        const { error } =
+            await supabase
+                .from("miembro_flores")
+                .delete()
+                .eq("id", id);
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        mostrarToast(
+            "🗑️ Flor eliminada"
+        );
+
+        obtenerFloresMiembro();
+
     }
 
     return (
@@ -69,12 +102,22 @@ function ModalColeccionMiembro({
                                 <FlorCard
                                     key={item.id}
                                     flor={item.flores}
+                                    usuario={usuario}
+                                    onEliminar={() =>
+                                        eliminarFlorMiembro(item.id)
+                                    }
                                 />
 
                             ))}
 
                         </div>
 
+                    )
+                }
+
+                {
+                    toast && (
+                        <Toast mensaje={toast} />
                     )
                 }
 

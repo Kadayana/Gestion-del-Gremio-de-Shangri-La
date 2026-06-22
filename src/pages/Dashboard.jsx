@@ -5,7 +5,7 @@ function Dashboard() {
 
   const [totalFlores, setTotalFlores] = useState(0);
   const [totalMiembros, setTotalMiembros] = useState(0);
-
+  const [loading, setLoading] = useState(true);
   const [raras, setRaras] = useState(0);
   const [superRaras, setSuperRaras] = useState(0);
   const [superSuperRaras, setSuperSuperRaras] = useState(0);
@@ -16,35 +16,45 @@ function Dashboard() {
   }, []);
 
   async function cargarDatos() {
+    setLoading(true);
 
-    const { data: flores } = await supabase
+    const { data: flores, error: errorFlores } = await supabase
       .from("flores")
       .select("*");
 
-    const { data: miembros } = await supabase
+    const { data: miembros, error: errorMiembros } = await supabase
       .from("miembros")
       .select("*");
 
-    setTotalFlores(flores?.length || 0);
-    setTotalMiembros(miembros?.length || 0);
+    if (errorFlores || errorMiembros) {
+      console.log("Error flores:", errorFlores);
+      console.log("Error miembros:", errorMiembros);
+      setLoading(false);
+      return;
+    }
 
-    setRaras(
-      flores?.filter((flor) => flor.rareza === "R").length || 0
-    );
+    const safeFlores = flores || [];
+    const safeMiembros = miembros || [];
 
-    setSuperRaras(
-      flores?.filter((flor) => flor.rareza === "SR").length || 0
-    );
+    setTotalFlores(safeFlores.length);
+    setTotalMiembros(safeMiembros.length);
 
-    setSuperSuperRaras(
-      flores?.filter((flor) => flor.rareza === "SSR").length || 0
-    );
+    setRaras(safeFlores.filter(f => f.rareza?.trim().toUpperCase() === "R").length);
+    setSuperRaras(safeFlores.filter(f => f.rareza?.trim().toUpperCase() === "SR").length);
+    setSuperSuperRaras(safeFlores.filter(f => f.rareza?.trim().toUpperCase() === "SSR").length);
+    setUltraRaras(safeFlores.filter(f => f.rareza?.trim().toUpperCase() === "UR").length);
 
-    setUltraRaras(
-      flores?.filter((flor) => flor.rareza === "UR").length || 0
-    );
+    setLoading(false);
   }
 
+
+  if (loading) {
+    return (
+      <div className="text-center p-10">
+        Cargando datos...
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto px-4 py-8">
 
