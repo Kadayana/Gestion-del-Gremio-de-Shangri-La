@@ -1,4 +1,5 @@
 function Button({
+  className = "",
   children,
   onClick,
   active = false,
@@ -31,6 +32,7 @@ function Button({
         transition
 
         ${variantes[variant]}
+        ${className}
       `}
     >
       {children}

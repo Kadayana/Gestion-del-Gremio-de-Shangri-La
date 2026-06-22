@@ -5,12 +5,12 @@ import Select from "../components/Select";
 import { supabase } from "../services/supabase";
 
 
-function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast }) {
+function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast, florEditar = null }) {
 
-    const [nombre, setNombre] = useState("");
-    const [rareza, setRareza] = useState("");
-    const [imagen, setImagen] = useState(null);
-    const [preview, setPreview] = useState(null);
+    const [nombre, setNombre] = useState(florEditar?.nombre || "");
+    const [rareza, setRareza] = useState(florEditar?.rareza || "");
+    const [imagen, setImagen] = useState(florEditar?.imagen || null);
+    const [preview, setPreview] = useState(florEditar?.imagen || null);
 
     function manejarImagen(e) {
         const archivo = e.target.files[0];
@@ -25,6 +25,32 @@ function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast }) {
     }
 
     async function guardarFlor() {
+        if (florEditar) {
+
+            const { error } = await supabase
+                .from("flores")
+                .update({
+                    nombre,
+                    rareza
+                })
+                .eq("id", florEditar.id);
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            mostrarToast(
+                "✏️ Flor actualizada"
+            );
+
+            await obtenerFlores();
+
+            onClose();
+
+            return;
+        }
+
         if (!nombre || !imagen) {
             alert("Por favor, completa todos los campos.");
             return;
@@ -76,7 +102,11 @@ function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast }) {
             <div className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-md">
 
                 <h2 className="text-2xl font-bold text-center mb-6">
-                    🌸 Agregar Flor
+                    {
+                        florEditar
+                            ? "✏️ Editar Flor"
+                            : "🌸 Agregar Flor"
+                    }
                 </h2>
 
                 <div className="space-y-4">

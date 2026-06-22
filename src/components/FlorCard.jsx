@@ -1,4 +1,4 @@
-function FlorCard({ flor, usuario, onEliminar }) {
+function FlorCard({ flor, usuario, onEliminar, onEditar }) {
 
     const esAdmin =
         usuario?.rol === "Lider" ||
@@ -31,7 +31,7 @@ function FlorCard({ flor, usuario, onEliminar }) {
                 {
                     esAdmin && (
                         <div className="flex gap-2 justify-center">
-                            <button
+                            <button onClick={() => onEditar(flor)}
                                 className="
                             bg-yellow-200
                             hover:bg-yellow-400

@@ -16,6 +16,8 @@ function Flores({ usuario }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [toast, setToast] = useState("");
   const [florEliminar, setFlorEliminar] = useState(null);
+  const [florEditar, setFlorEditar] = useState(null);
+
 
   useEffect(() => {
     obtenerFlores();
@@ -92,6 +94,14 @@ function Flores({ usuario }) {
     obtenerFlores();
   }
 
+  function editarFlor(flor) {
+
+    setFlorEditar(flor);
+
+    setMostrarModal(true);
+
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
 
@@ -152,14 +162,21 @@ function Flores({ usuario }) {
         }
 
       </div>
-      {mostrarModal && (
-        <ModalNuevaFlor
-          onClose={() => setMostrarModal(false)}
-          obtenerFlores={obtenerFlores}
-          mostrarToast={mostrarToast}
+      {
+        mostrarModal && (
+          <ModalNuevaFlor
+            florEditar={florEditar}
+            onClose={() => {
 
-        />
-      )}
+              setMostrarModal(false);
+              setFlorEditar(null);
+
+            }}
+            obtenerFlores={obtenerFlores}
+            mostrarToast={mostrarToast}
+          />
+        )
+      }
 
 
       {
@@ -187,6 +204,7 @@ function Flores({ usuario }) {
             flor={flor}
             usuario={usuario}
             onEliminar={solicitarEliminar}
+            onEditar={editarFlor}
           />
         ))}
 
@@ -196,7 +214,7 @@ function Flores({ usuario }) {
         florEliminar && (
           <ModalConfirmacion
             titulo="🗑️ Eliminar Flor"
-            mensaje={`¿Seguro que deseas eliminar "${florEliminar.nombre}"?`}
+            mensaje={`¿Segura que deseas eliminar "${florEliminar.nombre}"?`}
             onClose={() =>
               setFlorEliminar(null)
             }

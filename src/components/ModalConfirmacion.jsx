@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 function ModalConfirmacion({
     titulo,
     mensaje,
@@ -26,6 +28,7 @@ function ModalConfirmacion({
                     p-6
                     w-full
                     max-w-md
+                    animate-[fadeIn_.2s_ease-out]
                 "
             >
 
@@ -37,34 +40,25 @@ function ModalConfirmacion({
                     {mensaje}
                 </p>
 
+                <p className="text-center text-red-500 text-sm mb-4">
+                    Esta acción no se puede deshacer.
+                </p>
+
                 <div className="flex justify-center gap-3">
 
-                    <button
+                    <Button
+                        variant="secondary"
                         onClick={onClose}
-                        className="
-                            px-4
-                            py-2
-                            rounded-2xl
-                            bg-gray-200
-                            hover:bg-gray-300
-                        "
                     >
                         Cancelar
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
+                        variant="danger"
                         onClick={onConfirm}
-                        className="
-                            px-4
-                            py-2
-                            rounded-2xl
-                            bg-red-500
-                            text-white
-                            hover:bg-red-600
-                        "
                     >
                         Eliminar
-                    </button>
+                    </Button>
 
                 </div>
 
