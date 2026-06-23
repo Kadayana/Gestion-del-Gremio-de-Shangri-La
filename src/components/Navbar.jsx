@@ -19,7 +19,7 @@ function Navbar({ usuario }) {
 
         localStorage.removeItem("usuario");
 
-        window.location.reload();
+        window.location.href = "/";
     }
 
 
