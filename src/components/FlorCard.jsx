@@ -28,41 +28,6 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                 </span>
 
                 {
-                    onEditar && (
-                        <div className="flex gap-2 justify-center">
-                            {onEditar && (
-                                <button onClick={() => onEditar?.(flor)}
-                                    className="
-                            bg-yellow-200
-                            hover:bg-yellow-400
-                            px-3
-                            py-1
-                            rounded-full
-                            text-sm
-                        "
-                                >
-                                    ✏️
-                                </button>
-                            )}
-                            {(onEditar || onEliminar) && (
-                                <button onClick={onEliminar}
-                                    className="
-                                bg-red-200
-                                    hover:bg-red-400
-                                    px-3
-                                    py-1
-                                    rounded-full
-                                    text-sm
-                        "
-                                >
-
-                                    🗑️
-                                </button>
-                            )}
-
-                        </div>
-                    )
-                }{
                     mostrarAcciones && (
                         <div className="flex gap-2 justify-center">
 
