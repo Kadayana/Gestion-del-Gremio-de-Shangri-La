@@ -146,8 +146,16 @@ function Miembros({ usuario }) {
           <MiembroCard
             key={miembro.id}
             miembro={miembro}
-            onEditar={editarMiembro}
-            onEliminar={() => solicitarEliminar(miembro)}
+            onEditar={
+              esAdmin
+                ? editarMiembro
+                : undefined
+            }
+            onEliminar={
+              esAdmin
+                ? () => solicitarEliminar(miembro)
+                : undefined
+            }
           />
         ))}
 

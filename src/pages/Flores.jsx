@@ -18,9 +18,7 @@ function Flores({ usuario }) {
   const [florEliminar, setFlorEliminar] = useState(null);
   const [florEditar, setFlorEditar] = useState(null);
 
-  const esAdmin =
-    usuario?.rol === "Lider" ||
-    usuario?.rol === "Colider";
+  const puedeGestionarFlores = true;
 
   useEffect(() => {
     obtenerFlores();
@@ -155,15 +153,13 @@ function Flores({ usuario }) {
 
       </div>
 
-      <div className="flex justify-center mb-6">
-        {esAdmin && (
+      <div className="flex justify-center mb-6"> 
           <Button
             variant="primary"
             onClick={() => setMostrarModal(true)}
           >
             ➕ Agregar Flor
           </Button>
-        )}
       </div>
 
       {mostrarModal && (

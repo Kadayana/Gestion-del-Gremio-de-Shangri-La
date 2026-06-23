@@ -1,8 +1,7 @@
 function FlorCard({ flor, usuario, onEliminar, onEditar }) {
 
-    const esAdmin =
-        usuario?.rol === "Lider" ||
-        usuario?.rol === "Colider";
+    const mostrarAcciones =
+        onEditar || onEliminar;
 
     const colores = {
         R: "bg-blue-100 text-blue-700",
@@ -19,7 +18,7 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
     };
 
     return (
-        <div className="bg-pink-50 rounded-3xl shadow p-4 hover:shadow-lg transition hover:-translate-y-1 w-70">
+        <div className="bg-pink-50 rounded-3xl shadow p-4 hover:shadow-lg transition hover:-translate-y-1 w-full max-w-[280px] mx-auto">
             <div className="flex justify-between items-center mb-2 mt-2 ">
                 <span
                     className={`px-3 py-1 rounded-full text-sm ${colores[flor.rareza]
@@ -29,7 +28,7 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                 </span>
 
                 {
-                    esAdmin && (onEditar || onEliminar) && (
+                    onEditar && (
                         <div className="flex gap-2 justify-center">
                             {onEditar && (
                                 <button onClick={() => onEditar?.(flor)}
@@ -45,7 +44,7 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                                     ✏️
                                 </button>
                             )}
-                            {onEliminar && (
+                            {(onEditar || onEliminar) && (
                                 <button onClick={onEliminar}
                                     className="
                                 bg-red-200
@@ -57,6 +56,44 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                         "
                                 >
 
+                                    🗑️
+                                </button>
+                            )}
+
+                        </div>
+                    )
+                }{
+                    mostrarAcciones && (
+                        <div className="flex gap-2 justify-center">
+
+                            {onEditar && (
+                                <button
+                                    onClick={() => onEditar(flor)}
+                                    className="
+                        bg-yellow-200
+                        hover:bg-yellow-400
+                        px-3
+                        py-1
+                        rounded-full
+                        text-sm
+                    "
+                                >
+                                    ✏️
+                                </button>
+                            )}
+
+                            {onEliminar && (
+                                <button
+                                    onClick={onEliminar}
+                                    className="
+                        bg-red-200
+                        hover:bg-red-400
+                        px-3
+                        py-1
+                        rounded-full
+                        text-sm
+                    "
+                                >
                                     🗑️
                                 </button>
                             )}

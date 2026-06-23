@@ -4,8 +4,8 @@ import Button from "./Button";
 function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, onEliminar, }) {
 
 
-  const esAdmin =
-    onEditar || onEliminar;
+  const mostrarAcciones =
+  !!onEditar || !!onEliminar;
 
 
   const iconos = {
@@ -42,7 +42,7 @@ function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, 
 
 
         {
-          esAdmin && (
+          mostrarAcciones && (
             <div className="flex justify-center gap-2 ">
 
               <button

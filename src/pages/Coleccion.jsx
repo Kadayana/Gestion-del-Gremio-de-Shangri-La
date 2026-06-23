@@ -53,10 +53,6 @@ function Coleccion({ usuario }) {
   }, []);
 
 
-  const esAdmin =
-    usuario?.rol === "Lider" ||
-    usuario?.rol === "Colider";
-
 
   function mostrarToast(mensaje) {
     console.log("MOSTRAR TOAST:", mensaje);
@@ -108,8 +104,6 @@ function Coleccion({ usuario }) {
       </h2>
 
       <div className="flex justify-center mb-4">
-        {
-          esAdmin && (
             <Button variant="primary"
               onClick={() =>
                 setMostrarModal(true)
@@ -117,7 +111,6 @@ function Coleccion({ usuario }) {
             >
               ➕ Asignar Flor
             </Button>
-          )}
       </div>
 
 
