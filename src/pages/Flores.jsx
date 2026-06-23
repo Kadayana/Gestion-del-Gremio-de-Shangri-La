@@ -194,7 +194,6 @@ function Flores({ usuario }) {
             flor={flor}
             usuario={usuario}
             onEditar={editarFlor}
-            onEliminar={() => solicitarEliminar(flor)}
           />
         ))}
 

@@ -28,7 +28,7 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                 </span>
 
                 {
-                    mostrarAcciones && (
+                    (onEditar || onEliminar) && (
                         <div className="flex gap-2 justify-center">
 
                             {onEditar && (
@@ -37,8 +37,7 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                                     className="
                         bg-yellow-200
                         hover:bg-yellow-400
-                        px-3
-                        py-1
+                        px-3 py-1
                         rounded-full
                         text-sm
                     "
@@ -53,8 +52,7 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
                                     className="
                         bg-red-200
                         hover:bg-red-400
-                        px-3
-                        py-1
+                        px-3 py-1
                         rounded-full
                         text-sm
                     "
