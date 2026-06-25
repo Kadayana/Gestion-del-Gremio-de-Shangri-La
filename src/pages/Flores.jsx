@@ -122,7 +122,6 @@ function Flores({ usuario }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-
       <div className="flex justify-center gap-2 mb-6">
 
         <FilterButton
@@ -137,7 +136,13 @@ function Flores({ usuario }) {
           onClick={() => setFiltroRareza("R")}
           color="bg-blue-100"
         >
-          Rara
+          <span className="hidden sm:inline">
+            Rara
+          </span>
+
+          <span className="sm:hidden">
+            R
+          </span>
         </FilterButton>
 
         <FilterButton
@@ -145,7 +150,13 @@ function Flores({ usuario }) {
           onClick={() => setFiltroRareza("SR")}
           color="bg-purple-100"
         >
-          Super Rara
+          <span className="hidden sm:inline">
+            Super Rara
+          </span>
+
+          <span className="sm:hidden">
+            SR
+          </span>
         </FilterButton>
 
         <FilterButton
@@ -153,7 +164,13 @@ function Flores({ usuario }) {
           onClick={() => setFiltroRareza("SSR")}
           color="bg-yellow-100"
         >
-          Super Super Rara
+          <span className="hidden sm:inline">
+            Super Super Rara
+          </span>
+
+          <span className="sm:hidden">
+            SSR
+          </span>
         </FilterButton>
 
         <FilterButton
@@ -161,12 +178,18 @@ function Flores({ usuario }) {
           onClick={() => setFiltroRareza("UR")}
           color="bg-red-100"
         >
-          Ultra Rara
+          <span className="hidden sm:inline">
+            Ultra Rara
+          </span>
+
+          <span className="sm:hidden">
+            UR
+          </span>
         </FilterButton>
 
       </div>
 
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-6 ">
 
         <Button
           variant="primary"

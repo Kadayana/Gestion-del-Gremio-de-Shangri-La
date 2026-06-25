@@ -24,7 +24,7 @@ function Navbar({ usuario }) {
 
 
     return (
-        <div className="p-3 justify-center flex fixed top-0 left-0 right-0 z-50">
+        <div className="p-3 justify-center flex fixed top-0 left-0 right-0 z-50 bg-white">
             <div className="relative bg-gradient-to-r from-pink-200 to-pink-400 shadow-md rounded-4xl w-full max-w-7xl">
                 <div className="p-4 flex items-center justify-between">
 

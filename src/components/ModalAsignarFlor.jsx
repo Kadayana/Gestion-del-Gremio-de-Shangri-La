@@ -77,7 +77,7 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
     return (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
 
-            <div className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-md">
+            <div className="bg-white rounded-3xl shadow-xl p-6 w-[88%] max-w-md">
 
                 <h2 className="text-2xl font-bold text-center mb-6">
                     🌷 Asignar Flor
