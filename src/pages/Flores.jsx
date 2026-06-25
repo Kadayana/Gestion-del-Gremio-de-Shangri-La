@@ -7,6 +7,7 @@ import ModalNuevaFlor from "../components/ModalNuevaFlor";
 import Button from "../components/Button";
 import Toast from "../components/SuccessModal";
 import ModalConfirmacion from "../components/ModalConfirmacion";
+import ErrorModal from "../components/ErrorModal";
 
 function Flores({ usuario }) {
 
@@ -17,8 +18,11 @@ function Flores({ usuario }) {
   const [toast, setToast] = useState("");
   const [florEliminar, setFlorEliminar] = useState(null);
   const [florEditar, setFlorEditar] = useState(null);
+  const [errorModal, setErrorModal] = useState("");
 
-  const puedeGestionarFlores = true;
+  const esAdmin =
+    usuario?.rol === "Lider" ||
+    usuario?.rol === "Colider";
 
   useEffect(() => {
     obtenerFlores();
@@ -49,6 +53,16 @@ function Flores({ usuario }) {
     setTimeout(() => {
       setToast("");
     }, 3000);
+  }
+
+  function mostrarError(mensaje) {
+
+    setErrorModal(mensaje);
+
+    setTimeout(() => {
+      setErrorModal("");
+    }, 3000);
+
   }
 
   const floresSeguras = Array.isArray(flores) ? flores : [];
@@ -153,13 +167,15 @@ function Flores({ usuario }) {
 
       </div>
 
-      <div className="flex justify-center mb-6"> 
-          <Button
-            variant="primary"
-            onClick={() => setMostrarModal(true)}
-          >
-            ➕ Agregar Flor
-          </Button>
+      <div className="flex justify-center mb-6">
+
+        <Button
+          variant="primary"
+          onClick={() => setMostrarModal(true)}
+        >
+          ➕ Agregar Flor
+        </Button>
+
       </div>
 
       {mostrarModal && (
@@ -171,10 +187,19 @@ function Flores({ usuario }) {
           }}
           obtenerFlores={obtenerFlores}
           mostrarToast={mostrarToast}
+          mostrarError={mostrarError}
         />
       )}
 
-      {toast && <Toast mensaje={toast} />}
+      {toast &&
+        <Toast mensaje={toast} />
+      }
+
+      {
+        errorModal && (
+          <ErrorModal mensaje={errorModal} />
+        )
+      }
 
       <SearchBar
         value={busqueda}
@@ -182,7 +207,7 @@ function Flores({ usuario }) {
         placeholder="🔍 Buscar flor..."
       />
 
-       <p className="text-center text-gray-500 mb-6">
+      <p className="text-center text-gray-500 mb-6">
         🌸 Mostrando {resultados.length} de {floresSeguras.length} flores
       </p>
 
@@ -194,6 +219,11 @@ function Flores({ usuario }) {
             flor={flor}
             usuario={usuario}
             onEditar={editarFlor}
+            onEliminar={
+              esAdmin
+                ? () => solicitarEliminar(flor)
+                : null
+            }
           />
         ))}
 

@@ -36,6 +36,20 @@ function ModalAsignarFlor({ onClose, mostrarToast }) {
             return;
         }
 
+        const { data: existe } = await supabase
+            .from("miembro_flores")
+            .select("*")
+            .eq("miembro_id", miembroId)
+            .eq("flor_id", florId)
+            .maybeSingle();
+
+        if (existe) {
+
+            alert("🌷 Este miembro ya tiene esa flor");
+
+            return;
+        }
+
         const { error } =
             await supabase
                 .from("miembro_flores")
@@ -98,7 +112,7 @@ function ModalAsignarFlor({ onClose, mostrarToast }) {
                     <div className="flex justify-center gap-3">
 
                         <Button variant="primary" onClick={guardarAsignacion}>
-                            
+
                             🌷 Guardar
                         </Button>
 

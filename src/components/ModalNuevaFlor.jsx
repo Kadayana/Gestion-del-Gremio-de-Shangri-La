@@ -5,7 +5,7 @@ import Select from "../components/Select";
 import { supabase } from "../services/supabase";
 
 
-function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast, florEditar = null }) {
+function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast,  mostrarError, florEditar = null }) {
 
     const [nombre, setNombre] = useState(florEditar?.nombre || "");
     const [rareza, setRareza] = useState(florEditar?.rareza || "");
@@ -56,6 +56,21 @@ function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast, florEditar = nul
             return;
         }
 
+        const { data: florExistente } =
+            await supabase
+                .from("flores")
+                .select("*")
+                .ilike("nombre", nombre)
+                .maybeSingle();
+
+        if (florExistente && !florEditar) {
+
+            mostrarError(
+                "🌸 Esa flor ya existe"
+            );
+
+            return;
+        }
         const nombreArchivo = `${Date.now()}_${imagen.name}`;
         const { error: errorStorage } =
             await supabase.storage
