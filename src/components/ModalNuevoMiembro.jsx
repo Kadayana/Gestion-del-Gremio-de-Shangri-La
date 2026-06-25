@@ -5,7 +5,7 @@ import Select from "../components/Select";
 import { supabase } from "../services/supabase";
 
 
-function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, miembroEditar = null }) {
+function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, mostrarError, miembroEditar = null }) {
 
     const [nombre, setNombre] = useState(miembroEditar?.nombre || "");
     const [rol, setRol] = useState(miembroEditar?.rol || "");
@@ -40,6 +40,22 @@ function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, miembroEdit
         }
         if (!nombre || !rol) {
             alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        const { data: miembroExistente } =
+            await supabase
+                .from("miembros")
+                .select("*")
+                .ilike("nombre", nombre)
+                .maybeSingle();
+
+        if (miembroExistente && !miembroEditar) {
+
+            mostrarError(
+                "🙋🏼‍♀️ Este miembro ya existe"
+            );
+
             return;
         }
 

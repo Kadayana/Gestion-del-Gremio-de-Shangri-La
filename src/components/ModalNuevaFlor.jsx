@@ -71,6 +71,7 @@ function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast,  mostrarError, f
 
             return;
         }
+        
         const nombreArchivo = `${Date.now()}_${imagen.name}`;
         const { error: errorStorage } =
             await supabase.storage

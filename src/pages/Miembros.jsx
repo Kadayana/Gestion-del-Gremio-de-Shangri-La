@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import ModalNuevaMiembro from "../components/ModalNuevoMiembro";
 import Toast from "../components/SuccessModal";
 import ModalConfirmacion from "../components/ModalConfirmacion";
+import ErrorModal from "../components/ErrorModal";
 
 function Miembros({ usuario }) {
 
@@ -16,6 +17,7 @@ function Miembros({ usuario }) {
   const [toast, setToast] = useState("");
   const [miembroEditar, setMiembroEditar] = useState(null);
   const [miembroEliminar, setMiembroEliminar] = useState(null);
+  const [errorModal, setErrorModal] = useState("");
 
   const esAdmin =
     usuario?.rol === "Lider" ||
@@ -42,6 +44,15 @@ function Miembros({ usuario }) {
     setTimeout(() => {
       setToast("");
     }, 3000);
+  }
+
+  function mostrarError(mensaje) {
+    setErrorModal(mensaje);
+
+    setTimeout(() => {
+      setErrorModal("");
+    }, 2000);
+
   }
 
   const miembrosSeguros = Array.isArray(miembros) ? miembros : [];
@@ -125,10 +136,19 @@ function Miembros({ usuario }) {
           }}
           obtenerMiembros={obtenerMiembros}
           mostrarToast={mostrarToast}
+          mostrarError={mostrarError}
         />
       )}
 
-      {toast && <Toast mensaje={toast} />}
+      {toast &&
+        <Toast mensaje={toast} />
+      }
+
+      {
+        errorModal && (
+          <ErrorModal mensaje={errorModal} />
+        )
+      }
 
       <SearchBar
         value={busqueda}

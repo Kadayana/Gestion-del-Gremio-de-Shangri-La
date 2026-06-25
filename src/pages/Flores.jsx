@@ -56,12 +56,11 @@ function Flores({ usuario }) {
   }
 
   function mostrarError(mensaje) {
-
     setErrorModal(mensaje);
 
     setTimeout(() => {
       setErrorModal("");
-    }, 3000);
+    }, 2000);
 
   }
 

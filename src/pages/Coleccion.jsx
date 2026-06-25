@@ -6,6 +6,8 @@ import MiembroCard from "../components/MiembroCard";
 import ModalColeccionMiembro from "../components/ModalColeccionMiembro";
 import Toast from "../components/SuccessModal";
 import SearchBar from "../components/SearchBar";
+import ErrorModal from "../components/ErrorModal";
+
 
 function Coleccion({ usuario }) {
 
@@ -16,6 +18,7 @@ function Coleccion({ usuario }) {
   const [toast, setToast] = useState("");
   const [coleccion, setColeccion] = useState([]);
   const [busquedaFlor, setBusquedaFlor] = useState("");
+  const [errorModal, setErrorModal] = useState("");
 
   const resultadosFlor = coleccion.filter(
     (item) =>
@@ -55,13 +58,19 @@ function Coleccion({ usuario }) {
 
 
   function mostrarToast(mensaje) {
-    console.log("MOSTRAR TOAST:", mensaje);
-
     setToast(mensaje);
 
     setTimeout(() => {
       setToast("");
     }, 3000);
+  }
+
+  function mostrarError(mensaje) {
+    setErrorModal(mensaje);
+
+    setTimeout(() => {
+      setErrorModal("");
+    }, 2000);
 
   }
 
@@ -104,13 +113,13 @@ function Coleccion({ usuario }) {
       </h2>
 
       <div className="flex justify-center mb-4">
-            <Button variant="primary"
-              onClick={() =>
-                setMostrarModal(true)
-              }
-            >
-              ➕ Asignar Flor
-            </Button>
+        <Button variant="primary"
+          onClick={() =>
+            setMostrarModal(true)
+          }
+        >
+          ➕ Asignar Flor
+        </Button>
       </div>
 
 
@@ -183,6 +192,7 @@ function Coleccion({ usuario }) {
           <ModalAsignarFlor
             onClose={() => setMostrarModal(false)}
             mostrarToast={mostrarToast}
+            mostrarError={mostrarError}
           />
         )}
 
@@ -192,6 +202,13 @@ function Coleccion({ usuario }) {
           <Toast mensaje={toast} />
         )
       }
+
+      {
+        errorModal && (
+          <ErrorModal mensaje={errorModal} />
+        )
+      }
+
 
       {
         mostrarColeccion && (

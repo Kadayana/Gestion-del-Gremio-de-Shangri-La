@@ -1,11 +1,21 @@
 function ErrorModal({ mensaje }) {
 
     return (
+
+        <div
+      className="
+        fixed
+        inset-0
+        bg-black/50
+        flex
+        justify-center
+        items-center
+        z-[999]
+      "
+    > 
         <div
             className="
-                fixed
-                top-5
-                right-5
+               
                 z-[9999]
                 bg-red-500
                 text-white
@@ -17,6 +27,7 @@ function ErrorModal({ mensaje }) {
             "
         >
             {mensaje}
+        </div>
         </div>
     );
 }

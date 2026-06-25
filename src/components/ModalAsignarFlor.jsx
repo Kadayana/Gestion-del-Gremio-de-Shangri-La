@@ -3,7 +3,7 @@ import { supabase } from "../services/supabase";
 import Button from "./Button";
 import Select from "./Select";
 
-function ModalAsignarFlor({ onClose, mostrarToast }) {
+function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
 
     const [miembros, setMiembros] = useState([]);
     const [flores, setFlores] = useState([]);
@@ -45,7 +45,7 @@ function ModalAsignarFlor({ onClose, mostrarToast }) {
 
         if (existe) {
 
-            alert("🌷 Este miembro ya tiene esa flor");
+            mostrarError("🌷 Este miembro ya tiene esa flor");
 
             return;
         }
