@@ -90,6 +90,14 @@ function Flores({ usuario }) {
     return coincideNombre && coincideRareza;
   });
 
+  console.log({
+  filtroRareza,
+  total: floresSeguras.length,
+  resultados: resultados.length,
+});
+
+  
+
   function solicitarEliminar(flor) {
     setFlorEliminar(flor);
   }

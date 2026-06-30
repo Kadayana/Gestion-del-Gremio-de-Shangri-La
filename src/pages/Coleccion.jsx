@@ -51,8 +51,10 @@ function Coleccion({ usuario }) {
   }
 
   useEffect(() => {
-    obtenerMiembros();
-    obtenerColeccion();
+    Promise.all([
+      obtenerMiembros(),
+      obtenerColeccion()
+    ]);
   }, []);
 
 
@@ -121,6 +123,7 @@ function Coleccion({ usuario }) {
       (cantidadFlores[item.miembros.nombre] || 0) + 1;
 
   });
+
 
 
   return (
@@ -249,6 +252,7 @@ function Coleccion({ usuario }) {
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {miembros.map((miembro) => (
           <MiembroCard
+            
             mostrarRol={false}
             miembro={miembro}
             botonTexto="🌷 Ver colección"
