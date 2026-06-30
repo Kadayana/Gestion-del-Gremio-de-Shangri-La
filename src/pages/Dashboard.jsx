@@ -80,7 +80,7 @@ function Dashboard() {
           </h2>
 
           <p className="text-4xl mt-2 font-bold">
-            {totalMiembros} / 28
+            {totalMiembros} / 31
           </p>
         </div>
 

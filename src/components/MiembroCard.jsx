@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import Button from "./Button";
 
-function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, onEliminar, }) {
+function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, onEliminar, cantidadFlores }) {
 
 
   const mostrarAcciones =
-  !!onEditar || !!onEliminar;
+    !!onEditar || !!onEliminar;
 
 
   const iconos = {
@@ -84,7 +84,15 @@ function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, 
         {miembro.nombre}
       </h3>
 
-      
+      {
+        cantidadFlores !== undefined && (
+          <p className="text-center text-gray-500 text-sm mt-1">
+            🌸 {cantidadFlores} flores
+          </p>
+        )
+      }
+
+
       {botonTexto && (
         <div className="flex justify-center mt-4">
           <Button

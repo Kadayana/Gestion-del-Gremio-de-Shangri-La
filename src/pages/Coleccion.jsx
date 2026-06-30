@@ -86,6 +86,15 @@ function Coleccion({ usuario }) {
         .select("*");
 
     if (!error) {
+
+      data.sort((a, b) =>
+        a.nombre.localeCompare(
+          b.nombre,
+          "es",
+          { sensitivity: "base" }
+        )
+      );
+
       setMiembros(data);
     }
   }
@@ -103,6 +112,15 @@ function Coleccion({ usuario }) {
       setColeccion(data);
     }
   }
+
+  const cantidadFlores = {};
+
+  coleccion.forEach((item) => {
+
+    cantidadFlores[item.miembros.nombre] =
+      (cantidadFlores[item.miembros.nombre] || 0) + 1;
+
+  });
 
 
   return (
@@ -236,6 +254,9 @@ function Coleccion({ usuario }) {
             botonTexto="🌷 Ver colección"
             onBotonClick={() =>
               abrirColeccion(miembro)
+            }
+            cantidadFlores={
+              cantidadFlores[miembro.nombre] || 0
             }
 
           />

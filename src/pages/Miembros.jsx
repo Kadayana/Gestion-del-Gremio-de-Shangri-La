@@ -32,6 +32,28 @@ function Miembros({ usuario }) {
       .from("miembros")
       .select("*");
 
+    const ordenRoles = {
+      Lider: 1,
+      Colider: 2,
+      Veterano: 3,
+      Elite: 4,
+      Miembro: 5,
+    };
+
+    data.sort((a, b) => {
+
+      const diferencia =
+        ordenRoles[a.rol] - ordenRoles[b.rol];
+
+      if (diferencia !== 0)
+        return diferencia;
+
+      return a.nombre.localeCompare(b.nombre);
+
+    });
+
+    setMiembros(data);
+
     console.log("DATA MIEMBROS:", data);
     console.log("ERROR MIEMBROS:", error);
 

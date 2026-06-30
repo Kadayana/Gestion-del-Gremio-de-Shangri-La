@@ -40,7 +40,16 @@ function Flores({ usuario }) {
         return;
       }
 
+      data.sort((a, b) =>
+        a.nombre.localeCompare(
+          b.nombre,
+          "es",
+          { sensitivity: "base" }
+        )
+      );
+
       setFlores(data || []);
+
     } catch (err) {
       console.error(err);
       setFlores([]);
