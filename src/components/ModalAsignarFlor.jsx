@@ -8,7 +8,8 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
     const [miembros, setMiembros] = useState([]);
     const [flores, setFlores] = useState([]);
     const [miembroId, setMiembroId] = useState("");
-    const [florId, setFlorId] = useState("");
+    const [floresSeleccionadas, setFloresSeleccionadas] = useState([]);
+    const [floresDisponibles, setFloresDisponibles] = useState([]);
 
     useEffect(() => {
         cargarDatos();
@@ -30,35 +31,81 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
         setFlores(floresData || []);
     }
 
+    useEffect(() => {
+        if (miembroId) {
+            cargarFloresDisponibles();
+        }
+    }, [miembroId, flores]);
+
+
+    async function cargarFloresDisponibles() {
+
+        const { data } = await supabase
+            .from("miembro_flores")
+            .select("flor_id")
+            .eq("miembro_id", miembroId);
+
+        const idsAsignadas =
+            data.map(f => f.flor_id);
+
+        const disponibles =
+            flores.filter(
+                flor => !idsAsignadas.includes(flor.id)
+            );
+
+        setFloresDisponibles(disponibles);
+    }
+
+    function seleccionarFlor(id) {
+
+        if (
+            floresSeleccionadas.includes(id)
+        ) {
+
+            setFloresSeleccionadas(
+                floresSeleccionadas.filter(
+                    flor => flor !== id
+                )
+            );
+
+        } else {
+
+            setFloresSeleccionadas([
+                ...floresSeleccionadas,
+                id
+            ]);
+
+        }
+
+    }
+
+    useEffect(() => {
+
+        setFloresSeleccionadas([]);
+
+    }, [miembroId]);
+
     async function guardarAsignacion() {
-        if (!miembroId || !florId) {
+        if (
+            !miembroId ||
+            floresSeleccionadas.length === 0
+        ) {
             alert("Por favor, selecciona un miembro y una flor.");
             return;
         }
 
-        const { data: existe } = await supabase
-            .from("miembro_flores")
-            .select("*")
-            .eq("miembro_id", miembroId)
-            .eq("flor_id", florId)
-            .maybeSingle();
 
-        if (existe) {
 
-            mostrarError("🌷 Este miembro ya tiene esa flor");
-
-            return;
-        }
+        const registros =
+            floresSeleccionadas.map(id => ({
+                miembro_id: miembroId,
+                flor_id: id
+            }));
 
         const { error } =
             await supabase
                 .from("miembro_flores")
-                .insert([
-                    {
-                        miembro_id: miembroId,
-                        flor_id: florId
-                    },
-                ]);
+                .insert(registros);
 
         if (error) {
             console.error(error);
@@ -67,9 +114,8 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
 
         await cargarDatos();
         mostrarToast(
-            " 🌷 Flor asignada correctamente"
+            `🌷 ${floresSeleccionadas.length} flores asignadas`
         );
-
 
         onClose();
     }
@@ -97,19 +143,81 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
                         placeholder="👤 Seleccionar Miembro"
                     />
 
-                    <Select
-                        value={florId}
-                        onChange={(e) =>
-                            setFlorId(e.target.value)
-                        }
-                        options={flores.map((f) => ({
-                            value: f.id,
-                            label: f.nombre,
-                        }))}
-                        placeholder="🌷 Seleccionar Flor"
-                    />
+                    <div>
+
+                        <h3 className="font-semibold mb-3">
+                            🌸 Selecciona las flores
+                        </h3>
+
+
+
+                        <div className="
+        grid
+        grid-cols-2
+        gap-3
+        max-h-72
+        overflow-y-auto
+    ">
+
+                            {
+                                floresDisponibles.map(flor => {
+
+                                    const activa =
+                                        floresSeleccionadas.includes(flor.id);
+
+                                    return (
+
+
+
+                                        <button
+                                            type="button"
+                                            key={flor.id}
+                                            onClick={() =>
+                                                seleccionarFlor(flor.id)
+                                            }
+                                            className={`
+                            rounded-2xl
+                            border-2
+                            p-3
+                            transition
+
+                            ${activa
+                                                    ? "border-pink-500 bg-pink-100"
+                                                    : "border-gray-200 bg-white"
+                                                }
+                        `}
+                                        >
+
+                                            
+
+                                            <p className="font-medium mt-2">
+                                                {flor.nombre}
+                                            </p>
+
+                                        </button>
+
+                                    );
+
+                                })
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <p className="text-center text-gray-500">
+
+                        🌸 Seleccionadas:
+                        
+                        <b>
+                            {floresSeleccionadas.length}
+                        </b>
+
+                    </p>
 
                     <div className="flex justify-center gap-3">
+
+
 
                         <Button variant="primary" onClick={guardarAsignacion}>
 
