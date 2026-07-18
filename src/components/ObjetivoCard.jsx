@@ -19,10 +19,10 @@ function ObjetivoCard({
     };
 
     const nombresRareza = {
-        R: "R",
-        SR: "SR",
-        SSR: "SSR",
-        UR: "UR",
+        R: "R - Rara",
+        SR: "SR - Super Rara",
+        SSR: "SSR - Super Super Rara",
+        UR: "UR - Ultra Rara",
     };
 
     return (
