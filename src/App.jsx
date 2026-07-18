@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+
 
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
@@ -7,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Flores from "./pages/Flores";
 import Miembros from "./pages/Miembros";
 import Coleccion from "./pages/Coleccion";
+import Objetivos from "./pages/Objetivos";
 
 function App() {
   const [usuario, setUsuario] = useState(() => {
@@ -35,6 +37,11 @@ function App() {
       <div className="pt-20">
 
         <Routes>
+
+          <Route
+            path="/objetivos"
+            element={<Objetivos usuario={usuario} />}
+          />
 
           <Route
             path="/"

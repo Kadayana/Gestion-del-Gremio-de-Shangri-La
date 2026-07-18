@@ -25,7 +25,16 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
         const { data: floresData } =
             await supabase
                 .from("flores")
-                .select("*");
+                .select("*")
+                .eq("conseguida", true)
+
+        floresData.sort((a, b) =>
+            a.nombre.localeCompare(
+                b.nombre,
+                "es",
+                { sensitivity: "base" }
+            )
+        );
 
         setMiembros(miembrosData || []);
         setFlores(floresData || []);
@@ -188,7 +197,7 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
                         `}
                                         >
 
-                                            
+
 
                                             <p className="font-medium mt-2">
                                                 {flor.nombre}
@@ -208,7 +217,7 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
                     <p className="text-center text-gray-500">
 
                         🌸 Seleccionadas:
-                        
+
                         <b>
                             {floresSeleccionadas.length}
                         </b>

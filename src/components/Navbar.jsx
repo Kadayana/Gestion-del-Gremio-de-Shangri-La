@@ -7,6 +7,10 @@ function Navbar({ usuario }) {
     const location = useLocation();
     const [menuAbierto, setMenuAbierto] = useState(false);
 
+    usuario.rol === "Lider"
+        ||
+        usuario.rol === "Colider"
+
     const iconos = {
         Lider: "👑",
         Colider: "⚔️",
@@ -14,6 +18,11 @@ function Navbar({ usuario }) {
         Elite: "🤝",
         Miembro: "🌸",
     };
+
+    const esAdmin =
+        usuario?.rol === "Lider" ||
+        usuario?.rol === "Colider";
+
 
     function cerrarSesion() {
 
@@ -65,6 +74,16 @@ function Navbar({ usuario }) {
                                 🌷 Colección
                             </Button>
                         </Link>
+
+                        
+                                <Link to="/objetivos">
+                                    <Button
+                                        active={location.pathname === "/objetivos"}
+                                    >
+                                        🎯 Objetivos
+                                    </Button>
+                                </Link>
+
                     </div>
 
                     <div className="hidden md:flex items-center gap-4">
@@ -150,6 +169,18 @@ function Navbar({ usuario }) {
                                             🌷 Colección
                                         </Button>
                                     </Link>
+                                    {
+                                        esAdmin && (
+                                            <Link
+                                                to="/objetivos"
+                                                onClick={() => setMenuAbierto(false)}
+                                            >
+                                                <Button>
+                                                    🎯 Objetivos
+                                                </Button>
+                                            </Link>
+                                        )
+                                    }
 
                                     <div className="text-center mt-2">
                                         <p>

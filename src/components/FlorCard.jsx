@@ -1,7 +1,9 @@
-function FlorCard({ flor, usuario, onEliminar, onEditar }) {
-
-    const mostrarAcciones =
-        onEditar || onEliminar;
+function FlorCard({
+    flor,
+    onEliminar,
+    onEditar,
+    mostrarEstado = false,
+}) {
 
     const colores = {
         R: "bg-blue-100 text-blue-700",
@@ -17,67 +19,134 @@ function FlorCard({ flor, usuario, onEliminar, onEditar }) {
         UR: "UR - Ultra Rara",
     };
 
+    const estado = flor.conseguida
+        ? {
+            texto: "✅ Conseguida",
+            estilo: "bg-green-100 text-green-700",
+        }
+        : {
+            texto: "❌ Sin conseguir",
+            estilo: "bg-gray-100 text-gray-600",
+        };
+
     return (
-        <div className="bg-pink-50 rounded-3xl shadow p-4 hover:shadow-lg transition hover:-translate-y-1 w-full max-w-[280px] mx-auto">
-            <div className="flex justify-between items-center mb-2 mt-2 ">
+
+        <div
+            className="
+                bg-pink-50
+                rounded-3xl
+                shadow
+                p-4
+                hover:shadow-lg
+                transition
+                hover:-translate-y-1
+                w-full
+                max-w-[280px]
+                mx-auto
+            "
+        >
+
+            {/* Rareza y botones */}
+
+            <div className="flex justify-between items-center mb-4">
+
                 <span
-                    className={`px-3 py-1 rounded-full text-sm ${colores[flor.rareza]
-                        }`}
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${colores[flor.rareza]}`}
                 >
                     {nombresRareza[flor.rareza]}
                 </span>
 
-                {
-                    (onEditar || onEliminar) && (
-                        <div className="flex gap-2 justify-center">
+                <div className="flex gap-2">
 
-                            {onEditar && (
-                                <button
-                                    onClick={() => onEditar(flor)}
-                                    className="
-                        bg-yellow-200
-                        hover:bg-yellow-400
-                        px-3 py-1
-                        rounded-full
-                        text-sm
-                    "
-                                >
-                                    ✏️
-                                </button>
-                            )}
+                    {onEditar && (
 
-                            {onEliminar && (
-                                <button
-                                    onClick={onEliminar}
-                                    className="
-                        bg-red-200
-                        hover:bg-red-400
-                        px-3 py-1
-                        rounded-full
-                        text-sm
-                    "
-                                >
-                                    🗑️
-                                </button>
-                            )}
+                        <button
+                            onClick={() => onEditar(flor)}
+                            className="
+                                w-8
+                                h-8
+                                rounded-xl
+                                bg-yellow-200
+                                hover:bg-yellow-400
+                                transition
+                            "
+                        >
+                            ✏️
+                        </button>
 
-                        </div>
-                    )
-                }
+                    )}
+
+                    {onEliminar && (
+
+                        <button
+                            onClick={onEliminar}
+                            className="
+                                w-8
+                                h-8
+                                rounded-xl
+                                bg-red-200
+                                hover:bg-red-400
+                                transition
+                            "
+                        >
+                            🗑️
+                        </button>
+
+                    )}
+
+                </div>
+
             </div>
 
+            {/* Nombre */}
 
-            <h3 className="font-semibold text-lg text-center mt-2 mb-3 pt-2">
+            <h3 className="font-bold text-lg text-center">
                 🌸 {flor.nombre}
             </h3>
 
-            <img
-                className="w-50 h-50 object-cover rounded-2xl mx-auto"
-                src={flor.imagen}
-            />
+            {/* Estado */}
 
+            {mostrarEstado && (
+
+                <div className="flex justify-center mt-3">
+
+                    <span
+                        className={`
+                            px-3
+                            py-1
+                            rounded-full
+                            text-[11px]
+                            font-medium
+                            ${estado.estilo}
+                        `}
+                    >
+                        {estado.texto}
+                    </span>
+
+                </div>
+
+            )}
+
+            {/* Imagen */}
+
+            <div className="mt-4">
+
+                <img
+                    src={flor.imagen}
+                    className="
+                        w-52
+                        h-52
+                        object-cover
+                        rounded-2xl
+                        mx-auto
+                    "
+                    alt={flor.nombre}
+                />
+
+            </div>
 
         </div>
+
     );
 
 }

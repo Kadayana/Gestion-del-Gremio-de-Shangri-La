@@ -32,7 +32,9 @@ function Flores({ usuario }) {
     try {
       const { data, error } = await supabase
         .from("flores")
-        .select("*");
+        .select("*")
+        .eq("conseguida", true);
+
 
       if (error) {
         console.error(error);
@@ -256,6 +258,7 @@ function Flores({ usuario }) {
           <FlorCard
             key={flor.id}
             flor={flor}
+            modo="normal"
             usuario={usuario}
             onEditar={editarFlor}
             onEliminar={
@@ -263,6 +266,7 @@ function Flores({ usuario }) {
                 ? () => solicitarEliminar(flor)
                 : null
             }
+            
           />
         ))}
 
