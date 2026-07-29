@@ -20,32 +20,44 @@ function Coleccion({ usuario }) {
   const [busquedaFlor, setBusquedaFlor] = useState("");
   const [errorModal, setErrorModal] = useState("");
 
-  const resultadosFlor = coleccion.filter(
-    (item) =>
-      item.flores?.nombre
-        ?.toLowerCase()
-        .includes(
-          busquedaFlor.toLowerCase()
-        )
+  const resultadosFlor = coleccion.filter((item) =>
+    item.flores?.nombre
+      ?.toLowerCase()
+      .includes(busquedaFlor.toLowerCase())
   );
 
 
   const floresAgrupadas = {};
 
+  console.log(
+    "busqueda:",
+    busquedaFlor
+  );
+
+  console.log(
+    coleccion.length
+  );
+
+  console.log(
+    coleccion.filter(item =>
+      item.flores?.nombre === "Aroma Persistente del Viejo Jardín"
+    )
+  );
+
   resultadosFlor.forEach((item) => {
 
-    const nombreFlor =
-      item.flores.nombre;
+    const nombreFlor = item.flores.nombre;
 
     if (!floresAgrupadas[nombreFlor]) {
       floresAgrupadas[nombreFlor] = [];
     }
 
-    floresAgrupadas[nombreFlor].push(
-      item.miembros.nombre
-    );
-  });
+    floresAgrupadas[nombreFlor].push({
+      id: item.miembros.id,
+      nombre: item.miembros.nombre,
+    });
 
+  });
   function abrirColeccion(miembro) {
     console.log(miembro);
   }
@@ -88,6 +100,8 @@ function Coleccion({ usuario }) {
         .select("*");
 
     if (!error) {
+      console.log(data);
+
 
       data.sort((a, b) =>
         a.nombre.localeCompare(
@@ -102,17 +116,41 @@ function Coleccion({ usuario }) {
   }
 
   async function obtenerColeccion() {
-    const { data, error } = await supabase
-      .from("miembro_flores")
-      .select(`
-      id,
-      miembros(nombre),
-      flores(nombre)
-    `);
+    let todos = [];
+    let desde = 0;
+    const cantidad = 1000;
 
-    if (!error) {
-      setColeccion(data);
+    while (true) {
+      const { data, error } = await supabase
+        .from("miembro_flores")
+        .select(`
+        id,
+        miembro_id,
+        flor_id,
+        miembros(
+          id,
+          nombre
+        ),
+        flores(
+          id,
+          nombre
+        )
+      `)
+        .range(desde, desde + cantidad - 1);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      todos = [...todos, ...data];
+
+      if (data.length < cantidad) break;
+
+      desde += cantidad;
     }
+
+    setColeccion(todos);
   }
 
   const cantidadFlores = {};
@@ -125,6 +163,15 @@ function Coleccion({ usuario }) {
   });
 
 
+  console.log("Agrupadas:", floresAgrupadas);
+
+  Object.entries(floresAgrupadas).forEach(([flor, miembros]) => {
+    console.log(
+      flor,
+      miembros.length,
+      miembros.map(m => m.nombre)
+    );
+  });
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-3">
@@ -174,21 +221,26 @@ function Coleccion({ usuario }) {
                     </h3>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {miembros.map((nombre) => (
-                        <MiembroCard
-                          key={nombre}
-                          mostrarRol={false}
-                          miembro={{ nombre }}
 
-                        />
-                      ))}
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {miembros.map((miembro) => (
+                          <MiembroCard
+                            key={miembro.id}
+                            mostrarRol={false}
+                            miembro={miembro}
+                          />
+                        ))}
+                      </div>
+
                     </div>
                   </div>
                 )
               )
             }
 
+
             {
+
               resultadosFlor.length === 0 && (
                 <div
                   className="
@@ -252,17 +304,12 @@ function Coleccion({ usuario }) {
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {miembros.map((miembro) => (
           <MiembroCard
-            
+            key={miembro.id}
             mostrarRol={false}
             miembro={miembro}
             botonTexto="🌷 Ver colección"
-            onBotonClick={() =>
-              abrirColeccion(miembro)
-            }
-            cantidadFlores={
-              cantidadFlores[miembro.nombre] || 0
-            }
-
+            onBotonClick={() => abrirColeccion(miembro)}
+            cantidadFlores={cantidadFlores[miembro.nombre] || 0}
           />
         ))}
       </div>
@@ -271,8 +318,4 @@ function Coleccion({ usuario }) {
     </div>
   );
 }
-
-
 export default Coleccion;
-
-

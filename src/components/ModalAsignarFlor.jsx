@@ -103,8 +103,6 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
             return;
         }
 
-
-
         const registros =
             floresSeleccionadas.map(id => ({
                 miembro_id: miembroId,
@@ -115,9 +113,11 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
             await supabase
                 .from("miembro_flores")
                 .insert(registros);
+                console.log("Guardado");
 
         if (error) {
             console.error(error);
+            
             return;
         }
 
