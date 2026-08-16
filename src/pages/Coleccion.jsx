@@ -205,35 +205,63 @@ function Coleccion({ usuario }) {
           <div className="space-y-4 mb-6 flex flex-col items-center">
 
             {
-              Object.entries(
-                floresAgrupadas
-              ).map(
+              Object.entries(floresAgrupadas).map(
                 ([flor, miembros]) => (
 
+                  <div
+                    key={flor}
+                    className="
+          bg-pink-100
+          rounded-3xl
+          shadow
+          p-5
+          w-full
+          max-w-5xl
+          flex
+          flex-col
+        "
+                  >
 
-                  <div key={flor} className="content-center bg-pink-100 rounded-3xl shadow p-5  flex justify-center flex-col items-center
-                                max-w-5xl
-                                max-h-[80vh]
-                                overflow-y-auto">
-
-                    <h3 className="font-bold text-xl mb-3">
+                    {/* NOMBRE DE LA FLOR */}
+                    <h3 className="
+          font-bold
+          text-xl
+          text-center
+          mb-4
+          shrink-0
+        ">
                       🌸 {flor}
                     </h3>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {miembros.map((miembro) => (
-                          <MiembroCard
-                            key={miembro.id}
-                            mostrarRol={false}
-                            miembro={miembro}
-                          />
-                        ))}
-                      </div>
+                    {/* ZONA DE MIEMBROS */}
+                    <div
+                      className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            lg:grid-cols-3
+            gap-4
+            max-h-[400px]
+            overflow-y-auto
+            pr-2
+          "
+                    >
+
+                      {miembros.map((miembro) => (
+
+                        <MiembroCard
+                          key={miembro.id}
+                          mostrarRol={false}
+                          miembro={miembro}
+                        />
+
+                      ))}
 
                     </div>
+
                   </div>
+
                 )
               )
             }
