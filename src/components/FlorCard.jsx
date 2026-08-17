@@ -2,6 +2,7 @@ function FlorCard({
     flor,
     onEliminar,
     onEditar,
+    onMandarAObjetivos,
     mostrarEstado = false,
 }) {
 
@@ -12,12 +13,14 @@ function FlorCard({
         UR: "bg-red-100 text-red-700",
     };
 
+
     const nombresRareza = {
         R: "R - Rara",
         SR: "SR - Super Rara",
         SSR: "SSR - Super Super Rara",
         UR: "UR - Ultra Rara",
     };
+
 
     const estado = flor.conseguida
         ? {
@@ -28,6 +31,7 @@ function FlorCard({
             texto: "❌ Sin conseguir",
             estilo: "bg-gray-100 text-gray-600",
         };
+
 
     return (
 
@@ -46,22 +50,60 @@ function FlorCard({
             "
         >
 
-            {/* Rareza y botones */}
+
+            {/* RAREZA Y ACCIONES */}
 
             <div className="flex justify-between items-center mb-4">
 
                 <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${colores[flor.rareza]}`}
+                    className={`
+                        px-3
+                        py-1
+                        rounded-full
+                        text-xs
+                        font-medium
+                        ${colores[flor.rareza]}
+                    `}
                 >
                     {nombresRareza[flor.rareza]}
                 </span>
 
+
                 <div className="flex gap-2">
+
+                    {/* MANDAR A OBJETIVOS */}
+
+                    {onMandarAObjetivos && (
+
+                        <button
+                            onClick={() =>
+                                onMandarAObjetivos(flor)
+                            }
+                            title="Mandar a objetivos"
+                            className="
+                                w-8
+                                h-8
+                                rounded-xl
+                                bg-purple-200
+                                hover:bg-purple-400
+                                transition
+                            "
+                        >
+                            🎯
+                        </button>
+
+                    )}
+
+
+                    {/* EDITAR */}
 
                     {onEditar && (
 
                         <button
-                            onClick={() => onEditar(flor)}
+                            onClick={() =>
+                                onEditar(flor)
+                            }
+                            title="Editar flor"
                             className="
                                 w-8
                                 h-8
@@ -76,10 +118,14 @@ function FlorCard({
 
                     )}
 
+
+                    {/* ELIMINAR */}
+
                     {onEliminar && (
 
                         <button
                             onClick={onEliminar}
+                            title="Eliminar flor"
                             className="
                                 w-8
                                 h-8
@@ -98,13 +144,15 @@ function FlorCard({
 
             </div>
 
-            {/* Nombre */}
+
+            {/* NOMBRE */}
 
             <h3 className="font-bold text-lg text-center">
                 🌸 {flor.nombre}
             </h3>
 
-            {/* Estado */}
+
+            {/* ESTADO */}
 
             {mostrarEstado && (
 
@@ -127,7 +175,8 @@ function FlorCard({
 
             )}
 
-            {/* Imagen */}
+
+            {/* IMAGEN */}
 
             <div className="mt-4">
 

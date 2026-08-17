@@ -11,6 +11,7 @@ function ObjetivoCard({
         usuario?.rol === "Lider" ||
         usuario?.rol === "Colider";
 
+
     const colores = {
         R: "bg-blue-100 text-blue-700",
         SR: "bg-purple-100 text-purple-700",
@@ -18,12 +19,14 @@ function ObjetivoCard({
         UR: "bg-red-100 text-red-700",
     };
 
+
     const nombresRareza = {
         R: "R - Rara",
         SR: "SR - Super Rara",
         SSR: "SSR - Super Super Rara",
         UR: "UR - Ultra Rara",
     };
+
 
     return (
 
@@ -36,14 +39,16 @@ function ObjetivoCard({
                 transition
                 hover:shadow-lg
 
-                ${flor.prioritaria
-                    ? "border-2 border-yellow-400"
-                    : "border border-gray-200"
+                ${
+                    flor.prioritaria
+                        ? "border-2 border-yellow-400"
+                        : "border border-gray-200"
                 }
             `}
         >
 
-            {/* Encabezado */}
+
+            {/* ENCABEZADO */}
 
             <div className="flex justify-between items-center">
 
@@ -60,96 +65,139 @@ function ObjetivoCard({
                     {nombresRareza[flor.rareza]}
                 </span>
 
-                {
-                    flor.prioritaria && (
 
-                        <span className="text-xl">
-                            ⭐
-                        </span>
+                {flor.prioritaria && (
 
-                    )
-                }
+                    <span className="text-xl">
+                        ⭐
+                    </span>
+
+                )}
 
             </div>
 
-            
-            {/* Botones */}
 
-            {
-                esAdmin && (
+            {/* ACCIONES */}
 
-                    <div className="flex justify-center gap-2 mt-3">
+            <div className="flex justify-center gap-2 mt-3">
 
-                        <button
-                            onClick={onCambiarPrioridad}
-                            className={`
-                                w-9
-                                h-9
-                                rounded-xl
-                                transition
 
-                                ${flor.prioritaria
+                {/* ⭐ PRIORIDAD
+                    SOLO ADMIN */}
+
+                {esAdmin && (
+
+                    <button
+                        onClick={onCambiarPrioridad}
+                        title="Cambiar prioridad"
+                        className={`
+                            w-9
+                            h-9
+                            rounded-xl
+                            transition
+
+                            ${
+                                flor.prioritaria
                                     ? "bg-yellow-300 hover:bg-yellow-400"
                                     : "bg-gray-200 hover:bg-gray-300"
-                                }
-                            `}
-                        >
-                            {flor.prioritaria ? "⭐" : "☆"}
-                        </button>
+                            }
+                        `}
+                    >
+                        {flor.prioritaria
+                            ? "⭐"
+                            : "☆"
+                        }
+                    </button>
 
-                        <button
-                            onClick={onCambiarConseguida}
-                            className="
-                                w-9
-                                h-9
-                                rounded-xl
-                                bg-green-200
-                                hover:bg-green-300
-                            "
-                        >
-                            ✅
-                        </button>
+                )}
 
-                        <button
-                            onClick={onEditar}
-                            className="
-                                w-9
-                                h-9
-                                rounded-xl
-                                bg-yellow-200
-                                hover:bg-yellow-400
-                            "
-                        >
-                            ✏️
-                        </button>
 
-                        <button
-                            onClick={onEliminar}
-                            className="
-                                w-9
-                                h-9
-                                rounded-xl
-                                bg-red-200
-                                hover:bg-red-400
-                            "
-                        >
-                            🗑️
-                        </button>
+                {/* 🌸 CONSEGUIDA
+                    TODOS */}
 
-                    </div>
+                <button
+                    onClick={onCambiarConseguida}
+                    title="Marcar como conseguida"
+                    className="
+                        w-32
+                        h-9
+                        rounded-xl
+                        bg-green-200
+                        hover:bg-green-300
+                        transition
+                    "
+                >
+                    🌸 Conseguida
+                </button>
 
-                )
-            }
 
-            {/* Nombre */}
+                {/* ✏️ EDITAR
+                    SOLO ADMIN */}
 
-            <h3 className="text-lg font-bold mt-3 flex items-center justify-center gap-2">
+                {esAdmin && (
+
+                    <button
+                        onClick={onEditar}
+                        title="Editar objetivo"
+                        className="
+                            w-9
+                            h-9
+                            rounded-xl
+                            bg-yellow-200
+                            hover:bg-yellow-400
+                            transition
+                        "
+                    >
+                        ✏️
+                    </button>
+
+                )}
+
+
+                {/* 🗑️ ELIMINAR
+                    SOLO ADMIN */}
+
+                {esAdmin && (
+
+                    <button
+                        onClick={onEliminar}
+                        title="Eliminar objetivo"
+                        className="
+                            w-9
+                            h-9
+                            rounded-xl
+                            bg-red-200
+                            hover:bg-red-400
+                            transition
+                        "
+                    >
+                        🗑️
+                    </button>
+
+                )}
+
+            </div>
+
+
+            {/* NOMBRE */}
+
+            <h3 className="
+                text-lg
+                font-bold
+                mt-3
+                flex
+                items-center
+                justify-center
+                gap-2
+                text-center
+            ">
 
                 🌸 {flor.nombre}
 
             </h3>
 
-            {/* Estado */}
+
+            {/* ESTADO */}
 
             <div className="mt-3 flex justify-center">
 
@@ -165,11 +213,10 @@ function ObjetivoCard({
                         font-medium
                     "
                 >
-                    ❌ Sin conseguir
+                    🎯 Objetivo pendiente
                 </span>
 
             </div>
-
 
         </div>
 
