@@ -208,8 +208,8 @@ function ObjetivoCard({
                         py-1
                         rounded-full
                         text-xs
-                        bg-red-100
-                        text-red-700
+                        bg-orange-100
+                        text-orange-700
                         font-medium
                     "
                 >
