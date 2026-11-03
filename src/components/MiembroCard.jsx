@@ -17,7 +17,7 @@ function MiembroCard({
     Veterano: "💎",
     Elite: "🤝",
     Miembro: "🌸",
-    Admin: "🛠️"
+    Admin: "🛠️",
   };
 
   const estilos = {
@@ -26,12 +26,12 @@ function MiembroCard({
     Veterano: "bg-purple-100 text-purple-700",
     Elite: "bg-blue-100 text-blue-700",
     Miembro: "bg-green-100 text-green-700",
-    Admin: "bg-yellow-100 text-yellow-700"
+    Admin: "bg-yellow-100 text-yellow-700",
   };
 
   return (
-    <div className="bg-pink-50 rounded-3xl shadow p-5 hover:shadow-lg transition w-70 mx-auto">
-      <div className="flex justify-between items-center mb-2 mt-2 ">
+    <div className="bg-pink-50 rounded-3xl shadow p-5 hover:shadow-lg transition w-full max-w-[280px] min-w-0 mx-auto">
+      <div className="flex justify-between items-center mb-2 mt-2">
         {mostrarRol !== false && (
           <p
             className={`
@@ -44,18 +44,11 @@ function MiembroCard({
         )}
 
         {mostrarAcciones && (
-          <div className="flex justify-center gap-2 ">
+          <div className="flex justify-center gap-2">
             <button
               type="button"
               onClick={() => onEditar(miembro)}
-              className="
-              bg-yellow-200
-              hover:bg-yellow-400
-              px-3
-              py-1
-              rounded-full
-              text-sm
-            "
+              className="bg-yellow-200 hover:bg-yellow-400 px-3 py-1 rounded-full text-sm"
             >
               ✏️
             </button>
@@ -63,14 +56,7 @@ function MiembroCard({
             <button
               type="button"
               onClick={() => onEliminar(miembro)}
-              className="
-              bg-red-200
-              hover:bg-red-400
-                px-3
-                py-1
-                rounded-full
-                text-sm
-                "
+              className="bg-red-200 hover:bg-red-400 px-3 py-1 rounded-full text-sm"
             >
               🗑️
             </button>
@@ -78,7 +64,9 @@ function MiembroCard({
         )}
       </div>
 
-      <h3 className="text-3xl font-sue text-center">{miembro.nombre}</h3>
+      <h3 className="text-3xl font-sue text-center break-words">
+        {miembro.nombre}
+      </h3>
 
       {cantidadFlores !== undefined && (
         <p className="text-center text-gray-500 text-sm mt-1">
