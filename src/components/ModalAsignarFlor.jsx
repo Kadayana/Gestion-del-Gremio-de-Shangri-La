@@ -154,8 +154,8 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
     "
       >
         {/* ENCABEZADO */}
-        <h2 className="text-2xl font-bold text-center mb-6 shrink-0">
-          🌷 Asignar Flor
+        <h2 className="text-4xl font-sue text-center mb-6 shrink-0">
+          🌷 Asignar Flor 🌷
         </h2>
 
         {/* CONTENIDO DESPLAZABLE */}
@@ -203,7 +203,7 @@ function ModalAsignarFlor({ onClose, mostrarToast, mostrarError }) {
                     }
                   `}
                   >
-                    <p className="font-medium mt-2">{flor.nombre}</p>
+                    <p className="font-sue text-2xl mt-2">{flor.nombre}</p>
                   </button>
                 );
               })}

@@ -96,9 +96,9 @@ function Login({ iniciarSesion }) {
         <div className="text-center mb-6">
           <div className="text-6xl mb-3">🌸</div>
 
-          <h1 className="text-4xl font-bold text-pink-600">Shangri-La</h1>
+          <h1 className="text-5xl font-sue text-pink-600">Shangri-La</h1>
 
-          <p className="text-gray-600 mt-2">Sistema de gestión del gremio</p>
+          <p className="text-gray-600 mt-4">Sistema de gestión del gremio</p>
         </div>
 
         <h2 className="text-2xl font-bold text-center mb-6">

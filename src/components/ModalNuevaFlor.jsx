@@ -183,11 +183,11 @@ function ModalNuevaFlor({ onClose, obtenerFlores, mostrarToast, mostrarError, fl
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
             <div className="bg-white rounded-3xl shadow-xl p-6 w-[88%] max-w-md">
 
-                <h2 className="text-2xl font-bold text-center mb-6">
+                <h2 className="text-3xl font-sue text-center mb-6">
                     {
                         florEditar
                             ? "✏️ Editar Flor"
-                            : "🌸 Agregar Flor"
+                            : "🌸 Agregar Flor 🌸"
                     }
                 </h2>
 

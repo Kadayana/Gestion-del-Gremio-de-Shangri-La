@@ -86,11 +86,11 @@ function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, mostrarErro
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
             <div className="bg-white rounded-3xl shadow-xl p-6 w-[88%] max-w-md">
 
-                <h2 className="text-2xl font-bold text-center mb-6">
+                <h2 className="text-3xl font-sue text-center mb-6">
                     {
                         miembroEditar
                             ? "✏️ Editar Miembro"
-                            : "🌸 Agregar Miembro"
+                            : "🙋🏼‍♀️ Agregar Miembro 🙋🏼‍♀️"
                     }
                 </h2>
 
