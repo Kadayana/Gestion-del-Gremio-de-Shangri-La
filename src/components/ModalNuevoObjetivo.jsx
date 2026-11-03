@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import Select from "../components/Select";
-import { supabase } from "../services/supabase";
-import normalizarNombre from "../utils/normalizarNombre";
-import ModalFlorParecida from "./ModalFlorParecida";
+import Button from "../components/Button.jsx";
+import Input from "../components/Input.jsx";
+import Select from "../components/Select.jsx";
+import { supabase } from "../services/supabase.js";
+import normalizarNombre from "../utils/normalizarNombre.js";
+import ModalFlorParecida from "./ModalFlorParecida.jsx";
 
 
 function ModalNuevoObjetivo({ onClose, obtenerFlores, mostrarToast, mostrarError, florEditar = null }) {

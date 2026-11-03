@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../services/supabase";
-import Button from "../components/Button";
-import ModalAsignarFlor from "../components/ModalAsignarFlor";
-import MiembroCard from "../components/MiembroCard";
-import ModalColeccionMiembro from "../components/ModalColeccionMiembro";
-import Toast from "../components/SuccessModal";
-import SearchBar from "../components/SearchBar";
-import ErrorModal from "../components/ErrorModal";
-
+import { supabase } from "../services/supabase.js";
+import Button from "../components/Button.jsx";
+import ModalAsignarFlor from "../components/ModalAsignarFlor.jsx";
+import MiembroCard from "../components/MiembroCard.jsx";
+import ModalColeccionMiembro from "../components/ModalColeccionMiembro.jsx";
+import Toast from "../components/SuccessModal.jsx";
+import SearchBar from "../components/SearchBar.jsx";
+import ErrorModal from "../components/ErrorModal.jsx";
 
 function Coleccion({ usuario }) {
-
   const [mostrarModal, setMostrarModal] = useState(false);
   const [miembros, setMiembros] = useState([]);
   const [miembroSeleccionado, setMiembroSeleccionado] = useState(null);
@@ -21,55 +19,26 @@ function Coleccion({ usuario }) {
   const [errorModal, setErrorModal] = useState("");
 
   const resultadosFlor = coleccion.filter((item) =>
-    item.flores?.nombre
-      ?.toLowerCase()
-      .includes(busquedaFlor.toLowerCase())
+    item.flores?.nombre?.toLowerCase().includes(busquedaFlor.toLowerCase()),
   );
-
 
   const floresAgrupadas = {};
 
-  console.log(
-    "busqueda:",
-    busquedaFlor
-  );
-
-  console.log(
-    coleccion.length
-  );
-
-  console.log(
-    coleccion.filter(item =>
-      item.flores?.nombre === "Aroma Persistente del Viejo Jardín"
-    )
-  );
-
   resultadosFlor.forEach((item) => {
+    const nombreFlor = item.flores?.nombre;
+    const miembro = item.miembros;
 
-    const nombreFlor = item.flores.nombre;
+    if (!nombreFlor || !miembro) return;
 
     if (!floresAgrupadas[nombreFlor]) {
       floresAgrupadas[nombreFlor] = [];
     }
 
     floresAgrupadas[nombreFlor].push({
-      id: item.miembros.id,
-      nombre: item.miembros.nombre,
+      id: miembro.id,
+      nombre: miembro.nombre,
     });
-
   });
-  function abrirColeccion(miembro) {
-    console.log(miembro);
-  }
-
-  useEffect(() => {
-    Promise.all([
-      obtenerMiembros(),
-      obtenerColeccion()
-    ]);
-  }, []);
-
-
 
   function mostrarToast(mensaje) {
     setToast(mensaje);
@@ -85,7 +54,6 @@ function Coleccion({ usuario }) {
     setTimeout(() => {
       setErrorModal("");
     }, 2000);
-
   }
 
   function abrirColeccion(miembro) {
@@ -94,25 +62,20 @@ function Coleccion({ usuario }) {
   }
 
   async function obtenerMiembros() {
-    const { data, error } =
-      await supabase
-        .from("miembros")
-        .select("*");
+    const { data, error } = await supabase.from("miembros").select("*");
 
-    if (!error) {
-      console.log(data);
-
-
-      data.sort((a, b) =>
-        a.nombre.localeCompare(
-          b.nombre,
-          "es",
-          { sensitivity: "base" }
-        )
-      );
-
-      setMiembros(data);
+    if (error) {
+      console.error("Error al obtener miembros:", error);
+      return;
     }
+
+    const miembrosOrdenados = [...(data || [])].sort((a, b) =>
+      a.nombre.localeCompare(b.nombre, "es", {
+        sensitivity: "base",
+      }),
+    );
+
+    setMiembros(miembrosOrdenados);
   }
 
   async function obtenerColeccion() {
@@ -123,29 +86,31 @@ function Coleccion({ usuario }) {
     while (true) {
       const { data, error } = await supabase
         .from("miembro_flores")
-        .select(`
-        id,
-        miembro_id,
-        flor_id,
-        miembros(
+        .select(
+          `
           id,
-          nombre
-        ),
-        flores(
-          id,
-          nombre
+          miembro_id,
+          flor_id,
+          miembros(
+            id,
+            nombre
+          ),
+          flores(
+            id,
+            nombre
+          )
+        `,
         )
-      `)
         .range(desde, desde + cantidad - 1);
 
       if (error) {
-        console.error(error);
+        console.error("Error al obtener colección:", error);
         return;
       }
 
-      todos = [...todos, ...data];
+      todos = [...todos, ...(data || [])];
 
-      if (data.length < cantidad) break;
+      if (!data || data.length < cantidad) break;
 
       desde += cantidad;
     }
@@ -153,183 +118,98 @@ function Coleccion({ usuario }) {
     setColeccion(todos);
   }
 
+  useEffect(() => {
+    async function cargarDatos() {
+      await Promise.all([obtenerMiembros(), obtenerColeccion()]);
+    }
+
+    cargarDatos();
+  }, []);
+
   const cantidadFlores = {};
 
   coleccion.forEach((item) => {
+    const nombreMiembro = item.miembros?.nombre;
 
-    cantidadFlores[item.miembros.nombre] =
-      (cantidadFlores[item.miembros.nombre] || 0) + 1;
+    if (!nombreMiembro) return;
 
-  });
-
-
-  console.log("Agrupadas:", floresAgrupadas);
-
-  Object.entries(floresAgrupadas).forEach(([flor, miembros]) => {
-    console.log(
-      flor,
-      miembros.length,
-      miembros.map(m => m.nombre)
-    );
+    cantidadFlores[nombreMiembro] = (cantidadFlores[nombreMiembro] || 0) + 1;
   });
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col gap-3">
-
-      <h2 className="text-center text-3xl font-bold mb-4 ">
+      <h2 className="text-center text-3xl font-bold mb-4">
         🌷 Colección del Gremio
       </h2>
 
       <div className="flex justify-center mb-4">
-        <Button variant="primary"
-          onClick={() =>
-            setMostrarModal(true)
-          }
-        >
+        <Button variant="primary" onClick={() => setMostrarModal(true)}>
           ➕ Asignar Flor
         </Button>
       </div>
 
-
-
       <SearchBar
         value={busquedaFlor}
-        onChange={(e) =>
-          setBusquedaFlor(e.target.value)
-        }
+        onChange={(e) => setBusquedaFlor(e.target.value)}
         placeholder="🔍 Buscar una flor..."
       />
 
-      {
-        busquedaFlor && (
-          <div className="space-y-4 mb-6 flex flex-col items-center">
+      {busquedaFlor && (
+        <div className="space-y-4 mb-6 flex flex-col items-center">
+          {Object.entries(floresAgrupadas).map(([flor, miembros]) => (
+            <div
+              key={flor}
+              className="bg-pink-100 rounded-3xl shadow p-5 w-full max-w-5xl flex flex-col"
+            >
+              <h3 className="font-bold text-xl text-center mb-4 shrink-0">
+                🌸 {flor}
+              </h3>
 
-            {
-              Object.entries(floresAgrupadas).map(
-                ([flor, miembros]) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 max-h-100 overflow-y-auto pr-2">
+                {miembros.map((miembro, index) => (
+                  <MiembroCard
+                    key={`${miembro.id}-${index}`}
+                    mostrarRol={false}
+                    miembro={miembro}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
 
-                  <div
-                    key={flor}
-                    className="
-          bg-pink-100
-          rounded-3xl
-          shadow
-          p-5
-          w-full
-          max-w-5xl
-          flex
-          flex-col
-        "
-                  >
+          {resultadosFlor.length === 0 && (
+            <div className="bg-white rounded-3xl shadow p-5 text-center">
+              😢 Nadie tiene esa flor
+            </div>
+          )}
+        </div>
+      )}
 
-                    {/* NOMBRE DE LA FLOR */}
-                    <h3 className="
-          font-bold
-          text-xl
-          text-center
-          mb-4
-          shrink-0
-        ">
-                      🌸 {flor}
-                    </h3>
+      {mostrarModal && (
+        <ModalAsignarFlor
+          onClose={() => setMostrarModal(false)}
+          mostrarToast={mostrarToast}
+          mostrarError={mostrarError}
+        />
+      )}
 
+      {toast && <Toast mensaje={toast} />}
 
-                    {/* ZONA DE MIEMBROS */}
-                    <div
-                      className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            lg:grid-cols-3
-            gap-4
-            max-h-[400px]
-            overflow-y-auto
-            pr-2
-          "
-                    >
+      {errorModal && <ErrorModal mensaje={errorModal} />}
 
-                      {miembros.map((miembro) => (
-
-                        <MiembroCard
-                          key={miembro.id}
-                          mostrarRol={false}
-                          miembro={miembro}
-                        />
-
-                      ))}
-
-                    </div>
-
-                  </div>
-
-                )
-              )
-            }
-
-
-            {
-
-              resultadosFlor.length === 0 && (
-                <div
-                  className="
-                  bg-white
-                  rounded-3xl
-                  shadow
-                  p-5
-                  text-center
-                "
-                >
-                  😢 Nadie tiene esa flor
-                </div>
-              )
-            }
-
-          </div>
-        )
-      }
-
-      {
-        mostrarModal && (
-          <ModalAsignarFlor
-            onClose={() => setMostrarModal(false)}
-            mostrarToast={mostrarToast}
-            mostrarError={mostrarError}
-          />
-        )}
-
-
-      {
-        toast && (
-          <Toast mensaje={toast} />
-        )
-      }
-
-      {
-        errorModal && (
-          <ErrorModal mensaje={errorModal} />
-        )
-      }
-
-
-      {
-        mostrarColeccion && (
-          <ModalColeccionMiembro
-            miembro={miembroSeleccionado}
-            usuario={usuario}
-            onClose={() =>
-              setMostrarColeccion(false)
-            }
-          />
-        )
-      }
-
-
+      {mostrarColeccion && (
+        <ModalColeccionMiembro
+          miembro={miembroSeleccionado}
+          usuario={usuario}
+          onClose={() => setMostrarColeccion(false)}
+        />
+      )}
 
       <p className="text-center text-gray-500">
         Aquí aparecerán las flores de cada miembro.
       </p>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {miembros.map((miembro) => (
           <MiembroCard
             key={miembro.id}
@@ -341,9 +221,8 @@ function Coleccion({ usuario }) {
           />
         ))}
       </div>
-
-
     </div>
   );
 }
+
 export default Coleccion;

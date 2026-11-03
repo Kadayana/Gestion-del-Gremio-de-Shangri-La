@@ -1,127 +1,150 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import { supabase } from "../services/supabase";
-import ModalCambiarClave from "../components/ModalCambiarClave";
+import Button from "../components/Button.jsx";
+import Input from "../components/Input.jsx";
+import { supabase } from "../services/supabase.js";
+import ModalCambiarClave from "../components/ModalCambiarClave.jsx";
 
 function Login({ iniciarSesion }) {
+  const [nombre, setNombre] = useState("");
+  const [clave, setClave] = useState("");
+  const [mostrarCambioClave, setMostrarCambioClave] = useState(false);
+  const [usuarioActual, setUsuarioActual] = useState(null);
+  const [cargando, setCargando] = useState(false);
 
-    const [nombre, setNombre] = useState("");
-    const [clave, setClave] = useState("");
-    const [mostrarCambioClave, setMostrarCambioClave] = useState(false);
-    const [usuarioActual, setUsuarioActual] = useState(null);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    async function manejarLogin() {
-
-        const { data, error } =
-            await supabase
-                .from("miembros")
-                .select("*")
-                .eq("nombre", nombre)
-                .eq("clave", clave)
-                .single();
-
-        if (error || !data) {
-            alert("❌ Usuario o contraseña incorrectos");
-            return;
-        }
-
-        if (data.primer_ingreso) {
-
-            setUsuarioActual(data);
-            setMostrarCambioClave(true);
-
-            return;
-        }
-
-        localStorage.setItem(
-            "usuario",
-            JSON.stringify(data)
-        );
-
-        iniciarSesion(data);
-
-        navigate("/");
+  async function manejarLogin() {
+    if (!nombre.trim() || !clave) {
+      alert("Escribe tu nombre y contraseña.");
+      return;
     }
 
-    return (
-        <div className=" min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-purple-200 flex justify-center items-center p-4">
+    setCargando(true);
 
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 w-full max-w-md">
+    try {
+      // Buscar únicamente los datos necesarios del miembro
+      const { data: miembro, error: errorMiembro } = await supabase
+        .from("miembros")
+        .select("id, nombre, rol, primer_ingreso, auth_user_id")
+        .eq("nombre", nombre.trim())
+        .maybeSingle();
 
-                <div className="text-center mb-6">
-                    <div className="text-6xl mb-3">
-                        🌸
-                    </div>
+      if (errorMiembro || !miembro) {
+        alert("❌ Usuario o contraseña incorrectos.");
+        return;
+      }
 
-                    <h1 className="text-4xl font-bold text-pink-600">
-                        Shangri-La
-                    </h1>
+      // Comprobar que la cuenta ya fue migrada
+      if (!miembro.auth_user_id) {
+        alert(
+          "Esta cuenta todavía no ha sido migrada. Contacta al administrador.",
+        );
+        return;
+      }
 
-                    <p className="text-gray-600 mt-2">
-                        Sistema de gestión del gremio
-                    </p>
-                </div>
+      // Generar el correo interno usando el ID del miembro
+      const correoInterno = `miembro-${miembro.id}@cozyguild.invalid`;
 
-                <h2 className="text-2xl font-bold text-center mb-6">
-                    🌸 Iniciar Sesión
-                </h2>
+      // Iniciar sesión mediante Supabase Auth
+      const { data: authData, error: authError } =
+        await supabase.auth.signInWithPassword({
+          email: correoInterno,
+          password: clave,
+        });
 
-                <div className="space-y-4">
-                    <Input
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                        placeholder="👤 Nombre"
-                    />
+      if (authError || !authData.user) {
+        alert("❌ Usuario o contraseña incorrectos.");
+        return;
+      }
 
+      // Verificar que la cuenta Auth corresponde al miembro
+      if (authData.user.id !== miembro.auth_user_id) {
+        await supabase.auth.signOut();
+        alert("No se pudo verificar la cuenta. Contacta al administrador.");
+        return;
+      }
 
-                    <Input
-                        type="password"
-                        value={clave}
-                        onChange={(e) => setClave(e.target.value)}
-                        placeholder="🔒 Contraseña"
-                    />
+      const usuario = {
+        id: miembro.id,
+        nombre: miembro.nombre,
+        rol: miembro.rol,
+        primer_ingreso: miembro.primer_ingreso,
+        auth_user_id: miembro.auth_user_id,
+      };
 
-                    <div className="flex justify-center">
-                        <Button
-                            variant="primary"
-                            onClick={manejarLogin}
-                        >
-                            Ingresar
-                        </Button>
-                    </div>
-                </div>
+      if (miembro.primer_ingreso) {
+        setUsuarioActual(usuario);
+        setMostrarCambioClave(true);
+        return;
+      }
 
-            </div>
-            {
-                mostrarCambioClave && (
-                    <ModalCambiarClave
-                        usuario={usuarioActual}
-                        onSuccess={(usuarioActualizado) => {
+      localStorage.setItem("usuario", JSON.stringify(usuario));
+      iniciarSesion(usuario);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert("Ocurrió un error al iniciar sesión.");
+    } finally {
+      setCargando(false);
+    }
+  }
 
-                            localStorage.setItem(
-                                "usuario",
-                                JSON.stringify(usuarioActualizado)
-                            );
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-purple-200 flex justify-center items-center p-4">
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 w-full max-w-md">
+        <div className="text-center mb-6">
+          <div className="text-6xl mb-3">🌸</div>
 
-                            iniciarSesion(usuarioActualizado);
+          <h1 className="text-4xl font-bold text-pink-600">Shangri-La</h1>
 
-                            setMostrarCambioClave(false);
-
-                            navigate("/");
-                        }}
-                    />
-                )
-            }
+          <p className="text-gray-600 mt-2">Sistema de gestión del gremio</p>
         </div>
 
+        <h2 className="text-2xl font-bold text-center mb-6">
+          🌸 Iniciar Sesión
+        </h2>
 
+        <div className="space-y-4">
+          <Input
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholder="👤 Nombre"
+          />
 
-    );
+          <Input
+            type="password"
+            value={clave}
+            onChange={(e) => setClave(e.target.value)}
+            placeholder="🔒 Contraseña"
+          />
+
+          <div className="flex justify-center">
+            <Button
+              variant="primary"
+              onClick={manejarLogin}
+              disabled={cargando}
+            >
+              {cargando ? "Ingresando..." : "Ingresar"}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {mostrarCambioClave && (
+        <ModalCambiarClave
+          usuario={usuarioActual}
+          onSuccess={(usuarioActualizado) => {
+            localStorage.setItem("usuario", JSON.stringify(usuarioActualizado));
+
+            iniciarSesion(usuarioActualizado);
+            setMostrarCambioClave(false);
+            navigate("/");
+          }}
+        />
+      )}
+    </div>
+  );
 }
-
-
 
 export default Login;

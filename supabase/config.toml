@@ -1,0 +1,7 @@
+project_id = "bqquqrypamjaydzesxbh"
+
+[functions.crear-miembro]
+verify_jwt = true
+
+[functions.migrar-miembros]
+verify_jwt = true

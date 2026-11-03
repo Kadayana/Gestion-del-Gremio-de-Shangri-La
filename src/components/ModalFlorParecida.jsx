@@ -1,4 +1,4 @@
-import Button from "./Button";
+import Button from "./Button.jsx";
 
 function ModalFlorParecida({ nombreExistente, onCancelar, onContinuar }) {
     return (

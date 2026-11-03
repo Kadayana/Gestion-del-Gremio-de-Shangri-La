@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../services/supabase";
-import ObjetivoCard from "../components/ObjetivoCard";
-import SearchBar from "../components/SearchBar";
-import FilterButton from "../components/FilterButton";
-import ModalNuevoObjetivo from "../components/ModalNuevoObjetivo";
-import Button from "../components/Button";
-import Toast from "../components/SuccessModal";
-import ModalConfirmacion from "../components/ModalConfirmacion";
-import ErrorModal from "../components/ErrorModal";
+import { supabase } from "../services/supabase.js";
+import ObjetivoCard from "../components/ObjetivoCard.jsx";
+import SearchBar from "../components/SearchBar.jsx";
+import FilterButton from "../components/FilterButton.jsx";
+import ModalNuevoObjetivo from "../components/ModalNuevoObjetivo.jsx";
+import Button from "../components/Button.jsx";
+import Toast from "../components/SuccessModal.jsx";
+import ModalConfirmacion from "../components/ModalConfirmacion.jsx";
+import ErrorModal from "../components/ErrorModal.jsx";
 
 function Objetivos({ usuario }) {
 

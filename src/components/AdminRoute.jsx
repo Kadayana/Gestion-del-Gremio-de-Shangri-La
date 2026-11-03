@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { esAdmin } from "../utils/permisos";
+import { esAdmin } from "../utils/permisos.js";
 
 function AdminRoute({ usuario, children }) {
 

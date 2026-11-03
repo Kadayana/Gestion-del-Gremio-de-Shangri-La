@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
-import Button from "./Button";
+import Button from "./Button.jsx";
 
-function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, onEliminar, cantidadFlores }) {
-
-
-  const mostrarAcciones =
-    !!onEditar || !!onEliminar;
-
+function MiembroCard({
+  miembro,
+  botonTexto,
+  onBotonClick,
+  mostrarRol,
+  onEditar,
+  onEliminar,
+  cantidadFlores,
+}) {
+  const mostrarAcciones = !!onEditar || !!onEliminar;
 
   const iconos = {
     Lider: "👑",
@@ -14,6 +17,7 @@ function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, 
     Veterano: "💎",
     Elite: "🤝",
     Miembro: "🌸",
+    Admin: "🛠️"
   };
 
   const estilos = {
@@ -22,32 +26,29 @@ function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, 
     Veterano: "bg-purple-100 text-purple-700",
     Elite: "bg-blue-100 text-blue-700",
     Miembro: "bg-green-100 text-green-700",
+    Admin: "bg-yellow-100 text-yellow-700"
   };
 
   return (
     <div className="bg-pink-50 rounded-3xl shadow p-5 hover:shadow-lg transition w-70 mx-auto">
       <div className="flex justify-between items-center mb-2 mt-2 ">
-        {
-          mostrarRol !== false && (
-            <p
-              className={`
+        {mostrarRol !== false && (
+          <p
+            className={`
             px-3 py-1 rounded-full text-sm
             ${estilos[miembro.rol]}
           `}
-            >
-              {iconos[miembro.rol]} {miembro.rol}
-            </p>
-          )
-        }
+          >
+            {iconos[miembro.rol]} {miembro.rol}
+          </p>
+        )}
 
-
-        {
-          mostrarAcciones && (
-            <div className="flex justify-center gap-2 ">
-
-              <button
-                onClick={() => onEditar(miembro)}
-                className="
+        {mostrarAcciones && (
+          <div className="flex justify-center gap-2 ">
+            <button
+              type="button"
+              onClick={() => onEditar(miembro)}
+              className="
               bg-yellow-200
               hover:bg-yellow-400
               px-3
@@ -55,14 +56,14 @@ function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, 
               rounded-full
               text-sm
             "
-              >
-                ✏️
-              </button>
+            >
+              ✏️
+            </button>
 
-              <button onClick={() =>
-                onEliminar(miembro)
-              }
-                className="
+            <button
+              type="button"
+              onClick={() => onEliminar(miembro)}
+              className="
               bg-red-200
               hover:bg-red-400
                 px-3
@@ -70,40 +71,28 @@ function MiembroCard({ miembro, botonTexto, onBotonClick, mostrarRol, onEditar, 
                 rounded-full
                 text-sm
                 "
-              >
-                🗑️
-              </button>
-
-            </div>
-          )
-        }
-
+            >
+              🗑️
+            </button>
+          </div>
+        )}
       </div>
 
-      <h3 className="text-xl font-semibold text-center">
-        {miembro.nombre}
-      </h3>
+      <h3 className="text-xl font-semibold text-center">{miembro.nombre}</h3>
 
-      {
-        cantidadFlores !== undefined && (
-          <p className="text-center text-gray-500 text-sm mt-1">
-            🌸 {cantidadFlores} flores
-          </p>
-        )
-      }
-
+      {cantidadFlores !== undefined && (
+        <p className="text-center text-gray-500 text-sm mt-1">
+          🌸 {cantidadFlores} flores
+        </p>
+      )}
 
       {botonTexto && (
         <div className="flex justify-center mt-4">
-          <Button
-            variant="primary"
-            onClick={onBotonClick}
-          >
+          <Button variant="primary" onClick={onBotonClick}>
             {botonTexto}
           </Button>
         </div>
       )}
-
     </div>
   );
 }

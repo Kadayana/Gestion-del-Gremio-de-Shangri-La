@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import Select from "../components/Select";
-import { supabase } from "../services/supabase";
+import Button from "../components/Button.jsx";
+import Input from "../components/Input.jsx";
+import Select from "../components/Select.jsx";
+import { supabase } from "../services/supabase.js";
 
 
 function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, mostrarError, miembroEditar = null }) {
@@ -25,7 +25,7 @@ function ModalNuevaMiembro({ onClose, obtenerMiembros, mostrarToast, mostrarErro
 
             if (error) {
                 console.error(error);
-                return;
+                return; 
             }
 
             mostrarToast(

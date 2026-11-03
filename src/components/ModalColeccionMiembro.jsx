@@ -1,39 +1,40 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../services/supabase";
-import FlorCard from "./FlorCard";
-import Toast from "../components/SuccessModal";
-import ModalConfirmacion from "../components/ModalConfirmacion";
+import { supabase } from "../services/supabase.js";
+import FlorCard from "./FlorCard.jsx";
+import Toast from "./SuccessModal.jsx";
+import ModalConfirmacion from "./ModalConfirmacion.jsx";
 
-function ModalColeccionMiembro({
-miembro,
-usuario,
-onClose,
-}) {
+function ModalColeccionMiembro({ miembro, usuario, onClose }) {
+  const [flores, setFlores] = useState([]);
+  const [toast, setToast] = useState("");
+  const [florEliminar, setFlorEliminar] = useState(null);
 
+  useEffect(() => {
+    const scrollAnterior = document.body.style.overflow;
 
-const [flores, setFlores] = useState([]);
-const [toast, setToast] = useState("");
-const [florEliminar, setFlorEliminar] = useState(null);
+    document.body.style.overflow = "hidden";
 
-useEffect(() => {
-    obtenerFloresMiembro();
-}, []);
+    return () => {
+      document.body.style.overflow = scrollAnterior;
+    };
+  }, []);
 
-function mostrarToast(mensaje) {
-
+  const mostrarToast = (mensaje) => {
     setToast(mensaje);
 
     setTimeout(() => {
-        setToast("");
+      setToast("");
     }, 3000);
-}
+  };
 
-async function obtenerFloresMiembro() {
+  useEffect(() => {
+    async function cargarFlores() {
+      if (!miembro?.id) return;
 
-    const { data, error } =
-        await supabase
-            .from("miembro_flores")
-            .select(`
+      const { data, error } = await supabase
+        .from("miembro_flores")
+        .select(
+          `
                 id,
                 flores (
                     id,
@@ -41,124 +42,114 @@ async function obtenerFloresMiembro() {
                     rareza,
                     imagen
                 )
-            `)
-            .eq("miembro_id", miembro.id);
+            `,
+        )
+        .eq("miembro_id", miembro.id);
 
-    if (!error) {
-        setFlores(data);
+      if (error) {
+        console.error("Error al obtener flores:", error);
+        return;
+      }
+
+      setFlores(data || []);
     }
-}
 
-function solicitarEliminar(item) {
+    cargarFlores();
+  }, [miembro?.id]);
 
+  function solicitarEliminar(item) {
     setFlorEliminar(item);
+  }
 
-}
-
-async function eliminarFlorMiembro(id) {
-
-    const { error } =
-        await supabase
-            .from("miembro_flores")
-            .delete()
-            .eq("id", id);
+  async function eliminarFlorMiembro(id) {
+    const { error } = await supabase
+      .from("miembro_flores")
+      .delete()
+      .eq("id", id);
 
     if (error) {
-        console.error(error);
-        return;
+      console.error("Error al eliminar flor:", error);
+      return;
     }
 
-    mostrarToast(
-        "🗑️ Flor eliminada"
-    );
-
+    mostrarToast("🗑️ Flor eliminada");
     setFlorEliminar(null);
+  }
 
-    obtenerFloresMiembro();
-}
-
-return (
+  return (
     <div
-        className="fixed inset-0 bg-black/40 flex justify-center items-center z-50"
-        onClick={onClose}
+      className="
+      fixed inset-0 z-50
+      bg-black/40
+      flex justify-center items-center
+      p-3
+      overflow-y-auto
+      overscroll-contain
+    "
+      onClick={onClose}
     >
+      <div
+        className="
+        bg-white
+        rounded-3xl
+        shadow-xl
+        p-4 md:p-6
+        w-[95%]
+        max-w-5xl
+        max-h-[90vh]
+        max-h-[90dvh]
+        flex flex-col
+        overflow-hidden
+      "
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* ENCABEZADO */}
+        <h2 className="text-xl md:text-2xl font-bold text-center mb-4 shrink-0">
+          🌷 Colección de {miembro.nombre}
+        </h2>
 
+        {/* FLORES CON SCROLL */}
         <div
-            className="
-                bg-white
-                rounded-3xl
-                shadow-xl
-                p-4 md:p-6
-                w-[95%]
-                max-w-5xl
-                max-h-[85vh]
-                overflow-y-auto
-            "
-            onClick={(e) => e.stopPropagation()}
+          className="
+        flex-1
+        min-h-0
+        overflow-y-auto
+       
+      "
         >
-
-            <h2 className="text-xl md:text-2xl font-bold text-center mb-4">
-                🌷 Colección de {miembro.nombre}
-            </h2>
-
-            {
-                flores.length === 0 ? (
-
-                    <p className="text-center text-gray-500">
-                        Este miembro aún no tiene flores.
-                    </p>
-
-                ) : (
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                        {flores.map((item) => (
-
-                            <FlorCard
-                                key={item.id}
-                                flor={item.flores}
-                                usuario={usuario}
-                                onEliminar={() =>
-                                    solicitarEliminar(item)
-                                }
-                            />
-
-                        ))}
-
-                    </div>
-
-                )
-            }
-
-            {
-                toast && (
-                    <Toast mensaje={toast} />
-                )
-            }
-
-            {
-                florEliminar && (
-                    <ModalConfirmacion
-                        titulo="🗑️ Eliminar Asignación"
-                        mensaje={`¿Deseas quitar la flor "${florEliminar.flores.nombre}" de ${miembro.nombre}?`}
-                        onClose={() =>
-                            setFlorEliminar(null)
-                        }
-                        onConfirm={() =>
-                            eliminarFlorMiembro(
-                                florEliminar.id
-                            )
-                        }
-                    />
-                )
-            }
-
+          {flores.length === 0 ? (
+            <p className="text-center text-gray-500">
+              Este miembro aún no tiene flores.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+              {flores.map((item) => (
+                <FlorCard
+                  key={item.id}
+                  flor={item.flores}
+                  usuario={usuario}
+                  onEliminar={() => solicitarEliminar(item)}
+                  tamanoImagen="w-24 h-24"
+                  soloCodigoRareza={true}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
+        {toast && <Toast mensaje={toast} />}
+
+        {florEliminar && (
+          <ModalConfirmacion
+            titulo="🗑️ Eliminar Asignación"
+            mensaje={`¿Deseas quitar la flor "${florEliminar.flores.nombre}" de ${miembro.nombre}?`}
+            onClose={() => setFlorEliminar(null)}
+            onConfirm={() => eliminarFlorMiembro(florEliminar.id)}
+          />
+        )}
+      </div>
     </div>
-);
-
-
+  );
 }
 
 export default ModalColeccionMiembro;
