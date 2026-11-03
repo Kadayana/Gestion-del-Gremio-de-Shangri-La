@@ -6,6 +6,7 @@ function FlorCard({
   mostrarEstado = false,
   tamanoImagen = "w-52 h-52",
   soloCodigoRareza = false,
+  tamañoLetraNombre = "text-3xl",
 }) {
   const colores = {
     R: "bg-blue-100 text-blue-700",
@@ -127,7 +128,7 @@ function FlorCard({
 
       {/* NOMBRE */}
 
-      <h3 className="text-lg text-center">🌸 {flor.nombre}</h3>
+      <h3 className={`${tamañoLetraNombre} font-sue text-center `}>🌸 {flor.nombre}</h3> 
 
       {/* ESTADO */}
 
@@ -155,6 +156,7 @@ function FlorCard({
           src={flor.imagen}
           className={`
                 ${tamanoImagen}
+               
                object-cover
                rounded-2xl
                mx-auto

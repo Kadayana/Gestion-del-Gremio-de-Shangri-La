@@ -131,6 +131,7 @@ function ModalColeccionMiembro({ miembro, usuario, onClose }) {
                   onEliminar={() => solicitarEliminar(item)}
                   tamanoImagen="w-24 h-24"
                   soloCodigoRareza={true}
+                  tamañoLetraNombre="text-xl"
                 />
               ))}
             </div>

@@ -186,8 +186,8 @@ function ObjetivoCard({
             {/* NOMBRE */}
 
             <h3 className="
-                text-lg
-                font-sm
+                text-3xl
+                font-sue
                 mt-3
                 flex
                 items-center
