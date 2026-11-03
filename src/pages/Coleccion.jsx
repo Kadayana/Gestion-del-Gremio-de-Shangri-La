@@ -137,12 +137,12 @@ function Coleccion({ usuario }) {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col gap-3">
+    <div className="container mx-auto px-4 py-18 flex flex-col gap-3 bg-[#F9EAF0]">
       <h2 className="text-center text-3xl font-bold mb-4">
         🌷 Colección del Gremio
       </h2>
 
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-4 ">
         <Button variant="primary" onClick={() => setMostrarModal(true)}>
           ➕ Asignar Flor
         </Button>

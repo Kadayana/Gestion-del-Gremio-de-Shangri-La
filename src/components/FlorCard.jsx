@@ -127,7 +127,7 @@ function FlorCard({
 
       {/* NOMBRE */}
 
-      <h3 className="font-bold text-lg text-center">🌸 {flor.nombre}</h3>
+      <h3 className="text-lg text-center">🌸 {flor.nombre}</h3>
 
       {/* ESTADO */}
 
@@ -139,7 +139,7 @@ function FlorCard({
                             py-1
                             rounded-full
                             text-[11px]
-                            font-medium
+                            font-semibold
                             ${estado.estilo}
                         `}
           >

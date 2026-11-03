@@ -161,7 +161,7 @@ function Flores({ usuario }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-12 bg-[#F9EAF0]">
       {/* FILTROS */}
 
       <div className="flex justify-center gap-2 mb-6 flex-wrap">

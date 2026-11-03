@@ -78,7 +78,7 @@ function MiembroCard({
         )}
       </div>
 
-      <h3 className="text-xl font-semibold text-center">{miembro.nombre}</h3>
+      <h3 className="text-3xl font-sue text-center">{miembro.nombre}</h3>
 
       {cantidadFlores !== undefined && (
         <p className="text-center text-gray-500 text-sm mt-1">

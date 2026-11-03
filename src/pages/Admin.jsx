@@ -56,7 +56,7 @@ function Admin({ usuario }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-18 bg-[#F9EAF0]">
       <div className="bg-linear-to-r from-pink-200 to-purple-200 rounded-3xl shadow-xl p-8">
         <div className="text-center mb-8">
           <div className="text-6xl mb-3">⚙️</div>

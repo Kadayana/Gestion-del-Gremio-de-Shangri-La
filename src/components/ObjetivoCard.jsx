@@ -88,6 +88,7 @@ function ObjetivoCard({
                 {esAdmin && (
 
                     <button
+                    type="button"
                         onClick={onCambiarPrioridad}
                         title="Cambiar prioridad"
                         className={`
@@ -116,6 +117,7 @@ function ObjetivoCard({
                     TODOS */}
 
                 <button
+                    type="button"
                     onClick={onCambiarConseguida}
                     title="Marcar como conseguida"
                     className="
@@ -137,6 +139,7 @@ function ObjetivoCard({
                 {esAdmin && (
 
                     <button
+                        type="button"
                         onClick={onEditar}
                         title="Editar objetivo"
                         className="
@@ -160,6 +163,7 @@ function ObjetivoCard({
                 {esAdmin && (
 
                     <button
+                        type="button"
                         onClick={onEliminar}
                         title="Eliminar objetivo"
                         className="
@@ -183,7 +187,7 @@ function ObjetivoCard({
 
             <h3 className="
                 text-lg
-                font-bold
+                font-sm
                 mt-3
                 flex
                 items-center

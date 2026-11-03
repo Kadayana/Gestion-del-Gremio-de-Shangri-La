@@ -138,7 +138,7 @@ function Miembros({ usuario }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-12 bg-[#F9EAF0]">
       {/* Agregar miembro */}
       <div className="flex justify-center mb-6">
         {esAdmin && (

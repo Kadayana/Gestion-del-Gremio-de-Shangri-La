@@ -28,7 +28,7 @@ function App() {
 
       <div className="pt-20">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard usuario={usuario} />} />
 
           <Route path="/objetivos" element={<Objetivos usuario={usuario} />} />
 

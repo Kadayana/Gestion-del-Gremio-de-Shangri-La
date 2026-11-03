@@ -1,2 +1,21 @@
 @import "tailwindcss";
 
+@layer base {
+  body {
+    font-family: "Playpen Sans", sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-henny {
+    font-family: "Henny Penny", cursive;
+  }
+
+  .font-playpen {
+    font-family: "Playpen Sans", sans-serif;
+  }
+
+  .font-sue {
+    font-family: "Sue Ellen Francisco", cursive;
+  }
+}

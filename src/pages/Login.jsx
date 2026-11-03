@@ -91,7 +91,7 @@ function Login({ iniciarSesion }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-purple-200 flex justify-center items-center p-4">
+    <div className="min-h-screen bg-[#F9EAF0] flex justify-center items-center p-4">
       <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-6xl mb-3">🌸</div>

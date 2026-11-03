@@ -36,14 +36,17 @@ function Navbar({ usuario }) {
   }
 
   return (
-    <div className="p-3 justify-center flex fixed top-0 left-0 right-0 z-50 bg-white">
-      <div className="relative bg-linear-to-r from-pink-200 to-pink-400 shadow-md rounded-4xl w-full max-w-7xl">
+    <div className="p-3 justify-center flex fixed top-0 left-0 right-0 z-50 bg-[#F9EAF0]">
+      <div className="absolute -right-8 -top-10 text-[130px] opacity-10 pointer-events-none">
+        ✿
+      </div>
+      <div className="relative bg-linear-to-r from-pink-200 to-pink-400 shadow-md rounded-4xl w-full max-w-7xl font-sue text-2xl">
         <div className="p-4 flex items-center justify-between">
           {/* LOGO */}
-          <div className="font-bold text-xl text-black">🌸 Shangri-La</div>
+          <div className="font-sue text-3xl text-black">🌸 Shangri-La</div>
 
           {/* MENÚ DESKTOP */}
-          <div className="hidden md:flex gap-3">
+          <div className="hidden md:flex gap-3 ">
             <Link to="/">
               <Button active={location.pathname === "/"}>🏠 Inicio</Button>
             </Link>
@@ -84,7 +87,7 @@ function Navbar({ usuario }) {
           {/* USUARIO DESKTOP */}
           <div className="hidden md:flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm text-gray-500">
+              <p className="text-lg text-gray-500">
                 {iconos[usuario?.rol] || "👤"} {usuario?.rol}
               </p>
               <p className="font-semibold">{usuario?.nombre}</p>
@@ -97,7 +100,7 @@ function Navbar({ usuario }) {
 
           {/* BOTÓN MOBILE */}
           <button
-          type="button"
+            type="button"
             className="md:hidden text-3xl bg-white rounded-2xl px-3 py-1 shadow"
             onClick={() => setMenuAbierto(!menuAbierto)}
           >
